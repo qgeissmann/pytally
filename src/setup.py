@@ -34,7 +34,8 @@ setup(
     install_requires=[
         'dash',
     'dash_html_components',
-    'dash_core_components'
+    'dash_core_components',
+    'Pillow'
     ],
     tests_require=['nose'],
     test_suite='nose.collector'

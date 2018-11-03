@@ -1,14 +1,14 @@
 import dash
 import dash_html_components as html
-import base64
-from pitally.camera import DummyCamera
+from pitally.camera import MyPiCamera, DummyCamera
 from datetime import datetime
 
 
 picture_prefix = "pitally"
-
+print("dbg1")
+cam = MyPiCamera()
+print("dbg2")
 app = dash.Dash()
-cam = DummyCamera()
 
 app.layout = html.Div([
     html.Div([], id = 'image_div'),
@@ -24,6 +24,7 @@ def update_image_src(n_clicks_timestamp):
     print(n_clicks_timestamp)
     image = cam.capture(n_clicks_timestamp)
     image_str = 'data:image/jpeg;base64,{}'.format(image.decode())
+    print("decoded")
     img = html.Img(id='image', src=image_str, height='500px', width='auto')
 
     out = html.A(children=img,
@@ -41,6 +42,6 @@ def image_name(timestamp):
     return out
 
 
-if __name__ == '__main__':
-    app.run_server(debug=True)
 
+if __name__ == '__main__':
+    app.run_server(debug=True, port=8080, use_reloader=False, host='0.0.0.0')
