@@ -1,0 +1,24 @@
+{% extends "bootstrap/base.html" %}
+{% block scripts %}
+
+<script src="{{url_for('.static', filename='jquery.js')}}"></script>
+<script src="{{url_for('.static', filename='script.js')}}"></script>
+{{super()}}
+{% endblock %}
+
+{% block title %}This is an example page{% endblock %}
+
+{% block navbar %}
+<!-- Image and text -->
+<nav class="navbar navbar-light bg-light">
+  <a class="navbar-brand" href="#">
+    <img src="/docs/4.0/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+    Pitally
+  </a>
+</nav>
+{% endblock %}
+
+{% block content %}
+
+{% endblock %}
+

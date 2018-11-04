@@ -1,6 +1,5 @@
 from flask import Flask, request, render_template
-from pitally.camera import MyPiCamera, DummyCamera
-import json
+from pitally.camera import DummyCamera
 
 app = Flask(__name__)
 
@@ -17,7 +16,9 @@ def capture():
 
     image = cam.capture((w,h),iso, awb_gains, shutter_speed)
  #   image_str = 'data:image/jpeg;base64,{}'.format(image.decode())
-    return image
+    out = {"image" = image, ** data, results = {}}
+    print(out)
+    return out
         #'<img src ="%s"/>' % (image_str,)
 
 

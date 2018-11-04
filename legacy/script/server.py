@@ -1,6 +1,6 @@
 import dash
 import dash_html_components as html
-from pitally.camera import MyPiCamera, DummyCamera
+from pitally.camera import MyPiCamera
 from datetime import datetime
 
 
@@ -38,7 +38,7 @@ def image_name(timestamp):
     s = timestamp//1000
     date = datetime.utcfromtimestamp(s).strftime('%Y-%m-%d_%H-%M-%S')
     ms = s % 1000
-    out = '%s-%s.%03d.jpg' % (picture_prefix,date,ms)
+    out = '%s-%s.%03d.jpg' % (picture_prefix, date,ms)
     return out
 
 

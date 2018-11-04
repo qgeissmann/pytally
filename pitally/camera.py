@@ -22,13 +22,9 @@ class DummyCamera(BaseCamera):
                           (0, 128, 255))
         draw = ImageDraw.Draw(image)
 
-        # use a bitmap font
-#        font = ImageFont.truetype()
-
-#         draw.text((w//2, h//2),
-#                   str(n_clicks)
-# #                 font=font
-#                   )
+        draw.text((w//2, h//2),
+                str(time.time() % 256)
+                  )
 
         buffered = BytesIO()
         image.save(buffered, format="JPEG")
@@ -50,7 +46,7 @@ class MyPiCamera(BaseCamera):
         super(MyPiCamera,self).__init__()
 
 
-    def capture(self, resolution = (2592, 1944),
+    def capture(self, resolution = (3280, 2464),
                 iso=400,
                 awb_gains=1,
                 shutter_speed=50000):
