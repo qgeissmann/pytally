@@ -1,85 +1,50 @@
 
 var results = [];
-$(document).ready(function() {
-           console.log("ready");
-});
-//
-//function capture(e) {
-//    console.log("form");
-//    e.preventDefault();
-//    $.ajax({
-//        url:'/capture/1',
-//        type:'post',
-//        data:$('#capture_form').serialize(),
-//        success:function(data){
-//        console.log("receives");
-//            $("#captured_image").attr('src', data);
-//        },
-//        error:function(){
-//        console.log("error");
-//            //whatever you wanna do after the form is successfully submitted
-//        },
-//    });
-//});
- function addAllColumnHeaders(myList)
- {
-     var columnSet = [];
-     var headerTr$ = $('<tr/>');
+results = JSON.parse(localStorage.getItem("results"));
+var $table = $('#table');
 
-     for (var i = 0 ; i < myList.length ; i++) {
-         var rowHash = myList[i];
-         for (var key in rowHash) {
-             if ($.inArray(key, columnSet) == -1){
-                 columnSet.push(key);
-                 headerTr$.append($('<th/>').html(key));
-             }
-         }
-     }
-     $("#excelDataTable").append(headerTr$);
-
-     return columnSet;
- }
-
-
-function update_result_table(){
-    if(results.length < 1)
-        return;
-     var columns = Object.keys(results[0]);
-
-     for (var i = results.length -1 ; i < results.length ; i++) {
-         var row$ = $('<tr/>');
-         for (var col in columns) {
-             value = results[i][columns[col]]
-             var cellValue = value;
-
-             if (cellValue == null) { cellValue = ""; }
-             console.log(columns[col]);
-
-             if (columns[col] == "image") {
-
-                cellValue = "<img src='" + value +"' width='120px' height='auto'>";
-                console.log(cellValue);
-                 }
-
-             row$.append($('<td/>').html(cellValue));
-         }
-         $("#result_table").append(row$);
-     }
+function image_formatter(value){
+      return "<img width='50px' src= '" + value +"'>";
 }
+
+
+var columns = [
+            {field:"selected",
+            checkbox:"true"},
+            {
+            field: 'image',
+            title: 'Image',
+            formatter: image_formatter
+        }, {
+            field: 'filename',
+            title: 'Name'
+        }];
+
+$table.bootstrapTable({
+    columns: columns,
+    data: results
+});
+
+
 
 $(function() {
     $('#capture_button').on('click', function (e) {
 
     $('#capture_button').attr("disabled", "disabled");
     e.preventDefault();
+    var now = new Date();
+    time_str = now.format("yyyy-mm-dd'T'HH:MM:ss");
+    console.log(time_str);
+
     $.ajax({
         url:'/capture/1',
         type:'post',
         data:$('#capture_form').serialize(),
         success:function(data){
-            console.log(data)
+            data.filename = data.prefix + "_" + time_str + ".jpg"
+            data.selected = true;
             $("#captured_image").attr('src', data.image);
-             results.push(data)
+             results.push(data);
         },
         error:function(){
             console.log("error");
@@ -87,8 +52,46 @@ $(function() {
             },
         complete:function(){
             $('#capture_button').removeAttr("disabled");
-            update_result_table();
-        }
+            $table.bootstrapTable('load', results);
+            localStorage.setItem("results",JSON.stringify(results));
+            }
         });
     });
 })
+
+
+$(function() {
+    $('#download_button').on('click', function (e) {
+        $('#download_button').attr("disabled", "disabled");
+        var zip = new JSZip();
+        var selected_rows = $table.bootstrapTable('getSelections');
+        for(var i  =0; i < selected_rows.length; i++){
+            var res = selected_rows[i];
+            var base64String = res.image.replace("data:image/jpeg;base64,", "");
+            zip.file(res.filename, base64String, {base64: true});
+           }
+        zip.generateAsync({type:"blob"}).then(function(content) {
+                o = saveAs(content, "ZipFileName.zip");
+         });
+         $('#download_button').removeAttr("disabled");
+    });
+})
+
+
+$(function() {
+    $('#delete_button').on('click', function (e) {;
+        var selected_rows = $table.bootstrapTable('getSelections');
+        var filenames = $.map($table.bootstrapTable('getSelections'), function (row) {
+                return row.filename;
+            });
+            $table.bootstrapTable('remove', {
+                field: 'filename',
+                values: filenames
+            });
+        });
+})
+
+$(document).ready(function() {
+           console.log("ready");
+});
+

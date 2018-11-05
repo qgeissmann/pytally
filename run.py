@@ -35,8 +35,15 @@ def capture(base64=0):
 def index():
     return render_template('index.html')
 
+#todo
+# make jquery and bootstrap local
+# preview
+# favicon
+# tab name
 
 #cam = MyPiCamera()
 cam = DummyCamera()
 
 #curl - d '{"w":"2592", "h":"1944", "iso": "200", "awb_gains":"1", "shutter_speed":"10000"}' - H "Content-Type: application/json" - X POST http: // 192.168.1.108: 5000 / capture | base64 - d > / tmp / image2.jpg & & eog / tmp / image2.jpg
+
+#export FLASK_APP=run.py && flask run
