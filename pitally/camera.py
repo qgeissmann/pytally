@@ -37,9 +37,10 @@ class MyPiCamera(BaseCamera):
         from picamera import PiCamera
         self._pi_camera = PiCamera()
         self._pi_camera.start_preview()
-
+        camera.framerate
         # Camera warm-up time
         time.sleep(2)
+        self._pi_camera.framerate = 2
         self._pi_camera.exposure_mode = 'off'
         self._pi_camera.awb_mode = 'off'
 

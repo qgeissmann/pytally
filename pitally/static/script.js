@@ -1,6 +1,13 @@
-
 var results = [];
-results = JSON.parse(localStorage.getItem("results"));
+if (localStorage.results) {
+try{
+    results = JSON.parse(localStorage.getItem("results"));
+    }
+    catch(e){
+    console.log(e);
+    results =[];
+    }
+    }
 var $table = $('#table');
 
 function image_formatter(value){
@@ -95,3 +102,6 @@ $(document).ready(function() {
            console.log("ready");
 });
 
+window.onbeforeunload = function() {
+  return "Are you sure you want to navigate away?";
+}
