@@ -5,15 +5,18 @@ from pitally.camera import DummyCamera, MyPiCamera
 
 app = Flask('pitally', instance_relative_config=True)
 Bootstrap(app)
-app.config.from_object('config')
-app.config.from_pyfile('config.py')
+app.config.from_object('pitally.config')
+try:
+    app.config.from_pyfile('config.py')
+except FileNotFoundError as e:
+    #todo log
+    pass
 
 
-#todo
 # preview
 # tab name
 
-if app.debug is True:
+if app.testing is True:
     cam = DummyCamera()
 else:
     cam = MyPiCamera()
@@ -44,9 +47,3 @@ def capture(base64=0):
 @app.route('/')
 def index():
     return render_template('index.html')
-
-
-#curl - d '{"w":"2592", "h":"1944", "iso": "200", "awb_gains":"1", "shutter_speed":"10000"}' - H "Content-Type: application/json" - X POST http: // 192.168.1.108: 5000 / capture | base64 - d > / tmp / image2.jpg & & eog / tmp / image2.jpg
-#export FLASK_APP=app.py && flask run
-# memori split to 256 in pi
-# install dpt (flask, flask bootstrap picamera...)
