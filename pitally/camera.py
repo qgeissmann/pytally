@@ -16,10 +16,17 @@ class DummyCamera(BaseCamera):
                 shutter_speed=1):
         w,h = resolution
         from PIL import Image, ImageDraw, ImageFont
+        import random
         print('capture')
         image = Image.new('RGB',
                           (w, h),
                           (0, 128, 255))
+        pixels = image.load()  # create the pixel map
+
+        for i in range(image.size[0]):  # for every col:
+            for j in range(image.size[1]):  # For every row
+                pixels[i, j] = (i, j, random.randint(0,255))  # set the colour accordingly
+
         draw = ImageDraw.Draw(image)
 
         draw.text((w//2, h//2),
@@ -37,13 +44,12 @@ class MyPiCamera(BaseCamera):
         from picamera import PiCamera
         self._pi_camera = PiCamera()
         self._pi_camera.start_preview()
-        camera.framerate
+
         # Camera warm-up time
         time.sleep(2)
-        self._pi_camera.framerate = 2
+        self._pi_camera.framerate = 10
         self._pi_camera.exposure_mode = 'off'
         self._pi_camera.awb_mode = 'off'
-
         super(MyPiCamera,self).__init__()
 
 

@@ -48,3 +48,5 @@ def index():
 
 #curl - d '{"w":"2592", "h":"1944", "iso": "200", "awb_gains":"1", "shutter_speed":"10000"}' - H "Content-Type: application/json" - X POST http: // 192.168.1.108: 5000 / capture | base64 - d > / tmp / image2.jpg & & eog / tmp / image2.jpg
 #export FLASK_APP=app.py && flask run
+# memori split to 256 in pi
+# install dpt (flask, flask bootstrap picamera...)
