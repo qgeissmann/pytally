@@ -1,11 +1,11 @@
 from flask import Flask, request, render_template, jsonify
-from flask_bootstrap import Bootstrap
 from pitally.camera import DummyCamera, MyPiCamera
 
+# http://fancyapps.com/fancybox/3/ lookt at that
 
 app = Flask('pitally', instance_relative_config=True)
-Bootstrap(app)
 app.config.from_object('pitally.config')
+
 try:
     app.config.from_pyfile('config.py')
 except FileNotFoundError as e:
@@ -25,10 +25,10 @@ else:
 @app.route('/capture', methods=['POST'])
 @app.route('/capture/<int:base64>', methods=['POST'])
 def capture(base64=0):
-    print("cap")
     #todo force syncrhone
+    #fixme logging
     data = request.json
-    print(base64)
+
     if data is None:
         data = request.form
 

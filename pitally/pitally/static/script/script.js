@@ -1,17 +1,29 @@
-var preview_w = 640;
-var preview_h = 480;
-
-var capture_w = 640;
-var capture_h = 480;
-
 var results = [];
 var session_time_str= "";
 var $table = $('#table');
 
-function image_formatter(value){
-      return "<img width='50px' src= '" + value +"'>";
+
+function parse_resolution(res){
+    var regex = /^(\d+)x(\d+).*$/;
+    var match = regex.exec(res);
+    return  {w:match[1], h:match[2]};
 }
 
+var resolutions = ["640x480 (VGA)",
+                   "1640x1232",
+                    "3280x2464"
+];
+var capture_res = "";
+
+
+function image_formatter(value, row){
+ //data-title="A random title"
+//      data_options = {"caption" : "My caption", "type" : "iframe"};
+//    return "<a data-fancybox='gallery' data-options='" + data_options + "' href='javascript:;' ><img class='img-fluid' width='50px' src= '" + value +"'><a>
+//      console.log(row.filename);
+      return "<a data-fancybox='gallery' data-caption='" + row.filename + "' href='" +
+            value +"' ><img class='img-fluid' width='50px' src= '" + value +"'><a>";
+}
 
 var columns = [
             {field:"selected",
@@ -22,7 +34,8 @@ var columns = [
             formatter: image_formatter
         }, {
             field: 'filename',
-            title: 'Name'
+            title: 'Name',
+            searchable: true
         }];
 
 $table.bootstrapTable({
@@ -31,23 +44,31 @@ $table.bootstrapTable({
 });
 
 
+function retrieve_form(){
+    var form = $('#capture_form').serialize();
+    $('input[disabled]').each( function() {
+      form = form + '&' + $(this).attr('name') + '=' + $(this).val();
+    });
+    var resolution_txt = $("#resolution_select option:selected").text();
+    resolution = parse_resolution(resolution_txt);
+    resolution["resolution"] = resolution_txt
+    for (var key in resolution) {
+        form = form + '&' + key + '=' + resolution[key];
+    }
+    return form;
+
+}
 
 $(function() {
     $('#capture_button').on('click', function (e) {
-
-    $('#capture_button').attr("disabled", "disabled");
-    $('.show_during_capture').show();
-    $('.hide_during_capture').hide();
-    $('#preview_toggle').attr("disabled", "disabled");
+    $('.hide_during_capture_only').prop("disabled", true);
+    $('.show_during_capture_only').show();
+    $('.hide_during_capture_only').hide();
 
     e.preventDefault();
     var now = new Date();
     time_str = now.format("yyyy-mm-dd'T'HH:MM:ss");
-    console.log(time_str);
-    var form = $('#capture_form').serialize()
-    $('input[disabled]').each( function() {
-      form = form + '&' + $(this).attr('name') + '=' + $(this).val();
-    });
+    form = retrieve_form();
 
     $.ajax({
         url:'/capture/1',
@@ -68,8 +89,9 @@ $(function() {
             $('#capture_button').removeAttr("disabled");
             $('#preview_toggle').removeAttr("disabled");
 
-            $('.show_during_capture').hide();
-            $('.hide_during_capture').show();
+            $('.hide_during_capture_only').prop("disabled", false);
+            $('.show_during_capture_only').hide();
+            $('.hide_during_capture_only').show();
 
             $table.bootstrapTable('load', results);
             }
@@ -77,12 +99,14 @@ $(function() {
     });
 })
 
+
 function preview(){
 
+    form = retrieve_form();
     $.ajax({
         url:'/capture/1',
         type:'post',
-        data:$('#capture_form').serialize(),
+        data:form,
         success:function(data){
         //todo replace by #preview_image
             console.log("preview")
@@ -93,48 +117,28 @@ function preview(){
             },
         error:function(){
             console.log("error");
-            //whatever you wanna do after the form is successfully submitted
             },
         complete:function(){
             }
         });
-
 }
 
 $(function() {
     $('#preview_toggle').change(function (e) {
-    if($(this).prop("checked") == true){
-        $('#captured_image').hide();
-        $('#preview_image').show();
-        $('#table_div').hide();
-
-        capture_w = $('#w_input').val();
-        capture_h = $('#h_input').val();
-
-        $('#h_input').val(preview_h);
-        $('#w_input').val(preview_w);
-        $('.non_preview_input').attr('readonly', true);
-        $('#capture_button').attr("disabled", true);
-        preview();
+        console.log("preview toggled");
+        if($(this).prop("checked") == true){
+            $('.hide_during_preview_only').hide();
+            $('.hide_during_preview_only').prop('disabled', true);
+            capture_res = $("#resolution_select option:selected").text();
+            $("#resolution_select").val(resolutions[0]);
+            preview();
+            }
+        else{
+            $('.hide_during_preview_only').show();
+            $('.hide_during_preview_only').prop('disabled', false);
         }
-    else{
-        $('.non_preview_input').removeAttr("readonly");
-        $('#capture_button').removeAttr("disabled");
-
-        $('#captured_image').show();
-        $('#preview_image').hide();
-        $('#table_div').show();
-
-        $('#h_input').val(capture_h);
-        $('#w_input').val(capture_w);
-
-  }
+    })
 });
-
-
-//        console.log("toggle off");
-//    });
-})
 
 
 
@@ -170,41 +174,45 @@ $(function() {
         });
 })
 
-function populate(frm, data) {
-    $.each(data, function(key, value) {
-        var ctrl = $('[name='+key+']', frm);
-        switch(ctrl.prop("type")) {
-            case "radio": case "checkbox":
-                ctrl.each(function() {
-                    if($(this).attr('value') == value) $(this).attr("checked",value);
-                });
-                break;
-            default:
-                ctrl.val(value);
-        }
-    });
+function populate_form(data) {
+    var list = data.split("&");
+    for(var i in list) {
+        var s = list[i].split("=");
+        $("[name=" + s[0] +"]").val(s[1]);
+    }
+    return 0;
 }
 
 
-$(document).ready(function() {
 
+$(document).ready(function() {
     var now = new Date();
     session_time_str = now.format("yyyy-mm-dd'T'HH:MM:ss");
+    for (var i in resolutions){
+        $("#resolution_select").append(
+            "<option>" +resolutions[i] + "</option>"
+        );
+    }
 
-    console.log(localStorage.getItem("last_form"));
     if (localStorage.results) {
     try{
-        var last_form = JSON.parse(localStorage.getItem("last_form"));
-        console.log(last_form);
-        populate(capture_form, last_form);
+        var last_form = localStorage.getItem("last_form");
+        populate_form(last_form);
         }
     catch(e){
         console.log(e);
         }
-}
 
+    }
+    capture_res = $("#resolution_select option:selected").text();
+    $(".search").appendTo("#table_top");
 });
 
 window.onbeforeunload = function() {
   return "Are you sure you want to navigate away?";
 }
+//
+//$(document).on('click', '[data-toggle="lightbox"]', function(event) {
+//                event.preventDefault();
+//                $(this).ekkoLightbox();
+//            });

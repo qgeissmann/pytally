@@ -1,46 +1,115 @@
 {% extends "layout.html" %}
+
+{% block title %}{{super()}} — capture{% endblock %}
+
 {% block content %}
     {{ super() }}
     <div class="container">
         <div class="row">
-            <div class="col-md-6 image-container ">
+            <div class="col-md-8 image-container ">
                 <svg class="img-fluid" width="100%" viewBox="0 0 640 480">
+
+
                     <image id="captured_image" xlink:href="" width="100%" height="100%" position="absolute">
                     </image>
-                    <image id="preview_image" xlink:href="" width="100%" height="100%" position="absolute">
-                </svg>
+                    <image id="preview_image" xlink:href="" width="100%" height="100%" position="absolute" class="show_during_preview_only">
+                    </image>
+
+                    <defs>
+                    <linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a">
+                    <stop stop-color="#fff" stop-opacity="0" offset="0%"/>
+                    <stop stop-color="#fff" stop-opacity=".631" offset="63.146%"/>
+                    <stop stop-color="#fff" offset="100%"/>
+                    </linearGradient>
+                    </defs>
+
+                        <g fill="none" fill-rule="evenodd" class="show_during_capture_only" style="display: none;">
+                            <rect width="100%" height="100%" fill="rgba(55,55,55, 0.3)">
+                            </rect>
+                            <g transform="translate(1 1)">
+                                <path d="M360 180c0-99.4-80.6-180-180-180 id="Oval-2" stroke="url(#a)" stroke-width="10">
+                                    <animateTransform
+                                        attributeName="transform"
+                                        type="rotate"
+                                        from="0 320 240"
+                                        to="360 320 240"
+                                        dur="0.9s"
+                                        repeatCount="indefinite" />
+                                </path>
+                                <circle fill="#fff" cx="360" cy="180" r="5">
+                                    <animateTransform
+                                        attributeName="transform"
+                                        type="rotate"
+                                        from="0 320 240"
+                                        to="360 320 240"
+                                        dur="0.9s"
+                                        repeatCount="indefinite" />
+                                </circle>
+                            </g>
+                        </g>
+
+                    </svg>
+
             </div>
 
-            <div class="col-md-6">
-                <form id="capture_form" method="POST" role="form" class="form-horizontal" >
-                    Prefix <input class="non_preview_input" type="text" value="my-image" name="prefix"><br>
-                    Width (px) <input id="w_input" class="non_preview_input" type="number" value="3280" name ="w" min="1" max="3280" step="1"><br>
-                    Height (px)<input  id="h_input" class="non_preview_input" type="number" value="2464" name ="h" min="1" max="2464" step="1"><br>
-                    ISO <input type="number" value="200" name ="iso" min="1" max="1200" step="1"><br>
-                    Shutter speed (&#181s) <input type="number" value="10000" name ="shutter_speed" min="1000" max="10000000" step="100"><br>
-                    Gain <input type="number" value="1" step="0.01" name ="awb_gains"><br>
-                  <br>
-                    <button id="capture_button"  class="btn btn-primary" type="submit" style="font-size:14px">
-                      <span class="glyphicon glyphicon-camera hide_during_capture"></span> Capture</button>
-                  <br>
-                <label class="checkbox-inline">
-                  <input id="preview_toggle" type="checkbox" data-toggle="toggle"> Preview
+            <div class="col-md-4">
+                <form id="capture_form" method="POST" role="form" class="form" >
+
+                <div class="form-group">
+                <label for="prefix">Prefix</label>
+                <input type="text" class="hide_during_preview_only form-control" value="my-image" name="prefix" id="prefix">
+                </div>
+
+                <div class="form-group">
+                <label for="resolution_select">Resolution</label>
+                <select class="form-control custom-select hide_during_preview_only" name="resolution" id="resolution_select">
+                </select>
+                </div>
+
+                <div class="form-group">
+                <label for="iso">ISO</label>
+                <input type="number" class="form-control" value="200" name="iso" id="iso" min="1" max="1200" step="1">
+                </div>
+
+                <div class="form-group">
+                <label for="shutter_speed">Shutter speed (&#181s)</label>
+                <input type="number" class="form-control" value="10000" name ="shutter_speed" min="1000" max="10000000" step="100" id="shutter_speed">
+                </div>
+
+                <div class="form-group">
+                <label for="gain">Gain</label>
+                <input type="number" value="1" step="0.01" name ="awb_gains" class="form-control"  id="gain">
+                </div>
+
+                <div class="form-group">
+                    <button id="capture_button"  class="btn btn-primary hide_during_preview_only hide_during_capture_only'" type="submit" style="font-size:14px">
+                      <span class="glyphicon glyphicon-camera"></span> Capture</button>
+                </div>
+                <div class="form-group checkbox checbox-switch switch-primary">
+                <label>
+                    <input id="preview_toggle" type="checkbox" type="submit" class="hide_during_capture_only"> Preview
+                <span></span>
                 </label>
+                </div>
 
                 </form>
 
             </div>
         </div>
-        <div id="table_div" class="row">
-            <button id="download_button" type="button" class="btn btn-primary">
-                <span class="glyphicon glyphicon-download-alt"></span> Download
-            </button>
 
-            <button id="delete_button" type="button" class="btn btn-secondary">
-                <span class="glyphicon glyphicon-trash"></span> Delete
-            </button>
-           <table id="table" data-click-to-select="true"></table>
+        <div id="table_div" class="hide_during_preview_only">
+            <div id="table_top" class="row">
+                <button id="download_button" type="button" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-download-alt"></span> Download
+                </button>
 
+                <button id="delete_button" type="button" class="btn btn-secondary">
+                    <span class="glyphicon glyphicon-trash"></span> Delete
+                </button>
+            </div>
+        <div class="row">
+           <table id="table" data-click-to-select="false" data-url='x' data-sort-name="filename" data-search="true" data-sort-order="desc" data-width="1000"></table>
         </div>
     </div>
+</div>
 {% endblock %}

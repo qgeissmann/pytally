@@ -1,34 +1,42 @@
-{% extends "bootstrap/base.html" %}
+{% extends "base.html" %}
 {% block scripts %}
 
-<script src="{{url_for('.static', filename='jszip.js')}}"></script>
-<script src="{{url_for('.static', filename='FileSaver.js')}}"></script>
-<script src="{{url_for('.static', filename='date.format.js')}}"></script>
+<script src="{{url_for('.static', filename='script/jquery.min.js')}}"></script>
+<script src="{{url_for('.static', filename='script/popper.min.js')}}"></script>
+<script src="{{url_for('.static', filename='script/bootstrap.min.js')}}"></script>
 
 
-{{super()}}
+<script src="{{url_for('.static', filename='script/jszip.js')}}"></script>
+<script src="{{url_for('.static', filename='script/FileSaver.js')}}"></script>
+<script src="{{url_for('.static', filename='script/date.format.js')}}"></script>
+<script src="{{url_for('.static', filename='script/jquery.fancybox.min.js')}}"></script>
 
-<script src="{{url_for('.static', filename='jquery.js')}}"></script>
-<script src="{{url_for('.static', filename='bootstrap-table.js')}}"></script>
-<script src="{{url_for('.static', filename='bootstrap-toggle.js')}}"></script>
-<script src="{{url_for('.static', filename='script.js')}}"></script>
+<script src="{{url_for('.static', filename='script/bootstrap-table.js')}}"></script>
+<script src="{{url_for('.static', filename='script/bootstrap-toggle.js')}}"></script>
+
+<script src="{{url_for('.static', filename='script/script.js')}}"></script>
 {% endblock %}
 
 {% block styles %}
-{{super()}}
-<link rel="stylesheet" type="text/css" href="{{url_for('.static', filename='bootstrap-table.css')}}">
-<link rel="stylesheet" type="text/css" href="{{url_for('.static', filename='bootstrap-toggle.css')}}">
+
+<link rel="stylesheet" type="text/css" href="{{url_for('.static', filename='css/bootstrap.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{url_for('.static', filename='css/bootstrap-table.css')}}">
+<link rel="stylesheet" type="text/css" href="{{url_for('.static', filename='css/bootstrap-toggle.css')}}">
+<link rel="stylesheet" type="text/css" href="{{url_for('.static', filename='css/jquery.fancybox.min.css')}}">
+
+
+<link rel="stylesheet" type="text/css" href="{{url_for('.static', filename='css/style.css')}}">
 {% endblock %}
 
-{% block title %}This is an example page{% endblock %}
+{% block title %}Pitally{% endblock %}
 
 {% block navbar %}
 <!-- Image and text -->
-<nav class="navbar navbar-light bg-light">
+<nav class="navbar navbar-default">
   <a class="navbar-brand" href="#">
-    <img src="/docs/4.0/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
-    Pitally
+    <img src="{{url_for('.static', filename='svg/pitally.svg')}}" width="32" height="32" class="d-inline-block align-top" alt="">
   </a>
+   <a class="navbar-brand" href="/">Pitally</a>
 </nav>
 {% endblock %}
 
