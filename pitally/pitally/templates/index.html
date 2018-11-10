@@ -6,8 +6,7 @@
     {{ super() }}
     <div class="container">
         <div class="row">
-            <div class="col-md-8 image-container ">
-                <svg class="img-fluid" width="100%" viewBox="0 0 640 480">
+            <svg class="img-fluid" style="width:80%; height:80%"  viewBox="0 0 640 480">
 
 
                     <image id="captured_image" xlink:href="" width="100%" height="100%" position="absolute">
@@ -50,54 +49,57 @@
 
                     </svg>
 
-            </div>
 
-            <div class="col-md-4">
-                <form id="capture_form" method="POST" role="form" class="form" >
 
-                <div class="form-group">
+        </div>
+        <div class="row justify-content-between">
+            <div class="col-4">
+
+                    <form id="capture_form" method="POST" role="form" class="form" >
+                <div class="row justify-content-between form-group form-check-inline">
+                <div class="row col-4">
+                    <button id="capture_button"  class="btn btn-primary hide_during_preview_only hide_during_capture_only'" type="submit" style="font-size:14px">
+                      <span class="glyphicon glyphicon-camera"></span> Capture</button>
+               </div>
+                    <div class="checkbox checbox-switch switch-primary col-4">
+                    <label>
+                    <input id="preview_toggle" type="checkbox" type="submit" class="hide_during_capture_only"> Preview
+                    <span></span>
+                    </label>
+                    </div>
+                </div>
+
+                <div class="form-group form-inline ">
                 <label for="prefix">Prefix</label>
                 <input type="text" class="hide_during_preview_only form-control" value="my-image" name="prefix" id="prefix">
                 </div>
 
-                <div class="form-group">
+                <div class="form-group form-inline ">
                 <label for="resolution_select">Resolution</label>
                 <select class="form-control custom-select hide_during_preview_only" name="resolution" id="resolution_select">
                 </select>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group form-inline ">
                 <label for="iso">ISO</label>
                 <input type="number" class="form-control" value="200" name="iso" id="iso" min="1" max="1200" step="1">
                 </div>
 
-                <div class="form-group">
+                <div class="form-group form-inline ">
                 <label for="shutter_speed">Shutter speed (&#181s)</label>
                 <input type="number" class="form-control" value="10000" name ="shutter_speed" min="1000" max="10000000" step="100" id="shutter_speed">
                 </div>
 
-                <div class="form-group">
+                <div class="form-group form-inline ">
                 <label for="gain">Gain</label>
                 <input type="number" value="1" step="0.01" name ="awb_gains" class="form-control"  id="gain">
-                </div>
-
-                <div class="form-group">
-                    <button id="capture_button"  class="btn btn-primary hide_during_preview_only hide_during_capture_only'" type="submit" style="font-size:14px">
-                      <span class="glyphicon glyphicon-camera"></span> Capture</button>
-                </div>
-                <div class="form-group checkbox checbox-switch switch-primary">
-                <label>
-                    <input id="preview_toggle" type="checkbox" type="submit" class="hide_during_capture_only"> Preview
-                <span></span>
-                </label>
                 </div>
 
                 </form>
 
             </div>
-        </div>
 
-        <div id="table_div" class="hide_during_preview_only">
+        <div id="table_div" class="col-6 hide_during_preview_only">
             <div id="table_top" class="row">
                 <button id="download_button" type="button" class="btn btn-primary">
                     <span class="glyphicon glyphicon-download-alt"></span> Download
@@ -110,6 +112,7 @@
         <div class="row">
            <table id="table" data-click-to-select="false" data-url='x' data-sort-name="filename" data-search="true" data-sort-order="desc" data-width="1000"></table>
         </div>
+    </div>
     </div>
 </div>
 {% endblock %}

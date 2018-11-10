@@ -15,7 +15,7 @@
 }
 .checkbox.checbox-switch label input,
 .checkbox-inline.checbox-switch input {
-    display: none;
+    display: none !important;
 }
 .checkbox.checbox-switch label span,
 .checkbox-inline.checbox-switch span {
