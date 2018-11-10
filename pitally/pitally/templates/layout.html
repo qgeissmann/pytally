@@ -15,6 +15,7 @@
 <script src="{{url_for('.static', filename='script/bootstrap-toggle.js')}}"></script>
 
 <script src="{{url_for('.static', filename='script/script.js')}}"></script>
+
 {% endblock %}
 
 {% block styles %}
@@ -23,6 +24,7 @@
 <link rel="stylesheet" type="text/css" href="{{url_for('.static', filename='css/bootstrap-table.css')}}">
 <link rel="stylesheet" type="text/css" href="{{url_for('.static', filename='css/bootstrap-toggle.css')}}">
 <link rel="stylesheet" type="text/css" href="{{url_for('.static', filename='css/jquery.fancybox.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{url_for('.static', filename='open-iconic/font/css/open-iconic-bootstrap.css')}}">
 
 
 <link rel="stylesheet" type="text/css" href="{{url_for('.static', filename='css/style.css')}}">
@@ -32,12 +34,13 @@
 
 {% block navbar %}
 <!-- Image and text -->
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">
     <img src="{{url_for('.static', filename='svg/pitally.svg')}}" width="32" height="32" class="d-inline-block align-top" alt="">
-  </a>
-   <a class="navbar-brand" href="/">Pitally</a>
+   Pitally
+</a>
 </nav>
+
 {% endblock %}
 
 {% block content %}

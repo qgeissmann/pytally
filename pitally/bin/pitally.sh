@@ -24,7 +24,7 @@ then
     systemctl restart pitally.service
     echo "restarting pitally sevice"
 else
-export FLASK_APP=pitally && python3 -m flask run --host="0.0.0.0" --port 80
+    export FLASK_APP=pitally && python3 -m flask run --host="0.0.0.0" --port 80
 fi
 
 

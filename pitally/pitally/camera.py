@@ -63,6 +63,6 @@ class MyPiCamera(BaseCamera):
         self._pi_camera.resolution = resolution
 
         my_stream = BytesIO()
-        self._pi_camera.capture(my_stream, 'jpeg')
+        self._pi_camera.capture(my_stream, 'jpeg', quality=95)
         img_str = base64.b64encode(my_stream .getvalue())
         return img_str

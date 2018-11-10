@@ -61,9 +61,13 @@ function retrieve_form(){
 
 $(function() {
     $('#capture_button').on('click', function (e) {
-    $('.hide_during_capture_only').prop("disabled", true);
     $('.show_during_capture_only').show();
     $('.hide_during_capture_only').hide();
+    $('.hide_during_capture_only').prop("disabled", true);
+
+    $('#pitally_animation').attr("xlink:href", "static/svg/pitally_animation.svg");
+
+    $('#capture_button').prop("disabled", true);
 
     e.preventDefault();
     var now = new Date();
