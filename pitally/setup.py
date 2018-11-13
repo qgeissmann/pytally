@@ -8,6 +8,5 @@ setup(
     scripts=['bin/pitally.sh'],
     include_package_data=True,
     zip_safe=False,
-    install_requires=['Flask',
-                      "Flask-Bootstrap"]
+    install_requires=['Flask']
 )
