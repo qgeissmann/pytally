@@ -2,14 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="27f6b81f-fc2a-4141-945f-2eeeb8628f85" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pitally/camera.py" beforeDir="false" afterPath="$PROJECT_DIR$/pitally/camera.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pitally/static/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/pitally/static/script.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pitally/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/pitally/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pitally/templates/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/pitally/templates/layout.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requierments.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pitally/bin/pitally.service" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pitally/pitally/static/script/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/pitally/pitally/static/script/script.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pitally/pitally/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/pitally/pitally/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pitally/pitally/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/pitally/pitally/templates/index.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,51 +18,74 @@
     <session id="-161807303">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="6" />
+          <entry key="project.closed" value="12" />
           <entry key="project.open.time.0" value="1" />
-          <entry key="project.open.time.3" value="2" />
-          <entry key="project.open.time.4" value="5" />
-          <entry key="project.open.time.5" value="1" />
+          <entry key="project.open.time.3" value="3" />
+          <entry key="project.open.time.4" value="9" />
+          <entry key="project.open.time.5" value="3" />
           <entry key="project.open.time.6" value="1" />
-          <entry key="project.opened" value="10" />
+          <entry key="project.opened" value="17" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="css" value="1" />
-          <entry key="gitignore" value="1" />
-          <entry key="html" value="2" />
+          <entry key="LICENSE" value="3" />
+          <entry key="cfg" value="7" />
+          <entry key="css" value="4" />
+          <entry key="gitignore" value="2" />
+          <entry key="html" value="11" />
+          <entry key="in" value="6" />
           <entry key="jpg" value="1" />
-          <entry key="js" value="3" />
-          <entry key="py" value="31" />
-          <entry key="txt" value="1" />
+          <entry key="js" value="6" />
+          <entry key="map" value="1" />
+          <entry key="md" value="5" />
+          <entry key="py" value="62" />
+          <entry key="service" value="3" />
+          <entry key="sh" value="8" />
+          <entry key="svg" value="2" />
+          <entry key="txt" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="CSS" value="1" />
-          <entry key="HTML" value="2" />
+          <entry key="Bash" value="8" />
+          <entry key="CSS" value="4" />
+          <entry key="HTML" value="11" />
           <entry key="Image" value="1" />
-          <entry key="JavaScript" value="3" />
-          <entry key="PLAIN_TEXT" value="2" />
-          <entry key="Python" value="31" />
+          <entry key="JavaScript" value="6" />
+          <entry key="Markdown" value="5" />
+          <entry key="PLAIN_TEXT" value="25" />
+          <entry key="Python" value="62" />
+          <entry key="SVG" value="2" />
+          <entry key="Service unit configuration for systemd" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="dummy" value="3" />
+          <entry key="css" value="125" />
+          <entry key="dummy" value="8" />
           <entry key="gitignore" value="9" />
-          <entry key="html" value="1181" />
-          <entry key="js" value="3241" />
-          <entry key="py" value="3692" />
+          <entry key="html" value="3697" />
+          <entry key="in" value="36" />
+          <entry key="js" value="5051" />
+          <entry key="md" value="86" />
+          <entry key="py" value="4439" />
+          <entry key="service" value="28" />
+          <entry key="sh" value="315" />
+          <entry key="svg" value="21" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="HTML" value="1181" />
-          <entry key="JavaScript" value="3241" />
-          <entry key="PLAIN_TEXT" value="12" />
-          <entry key="Python" value="3692" />
+          <entry key="Bash" value="315" />
+          <entry key="CSS" value="125" />
+          <entry key="HTML" value="3697" />
+          <entry key="JavaScript" value="5051" />
+          <entry key="Markdown" value="86" />
+          <entry key="PLAIN_TEXT" value="53" />
+          <entry key="Python" value="4439" />
+          <entry key="SVG" value="21" />
+          <entry key="Service unit configuration for systemd" value="28" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -74,101 +94,94 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app.py">
+        <entry file="file://$PROJECT_DIR$/pitally/setup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="735">
-              <caret line="51" column="39" selection-start-line="51" selection-start-column="39" selection-end-line="51" selection-end-column="39" />
+            <state relative-caret-position="60">
+              <caret line="4" column="17" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pitally/setup.cfg">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="5" column="25" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pitally/pitally/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="5" column="51" selection-start-line="5" selection-start-column="51" selection-end-line="5" selection-end-column="51" />
               <folding>
                 <element signature="e#0#58#0" expanded="true" />
-                <marker date="1541554692433" expanded="true" signature="1048:1049" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pitally/static/script.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1020">
-              <caret line="68" column="12" selection-start-line="68" selection-start-column="12" selection-end-line="68" selection-end-column="12" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/instance/config.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" selection-start-line="2" selection-end-line="2" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pitally/static/bootstrap-table.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="9175" selection-start-line="6" selection-start-column="9164" selection-end-line="6" selection-end-column="9178" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pitally/static/bootstrap-table.css">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="26" selection-start-column="26" selection-end-column="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pitally/templates/layout.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="19" column="92" selection-start-line="19" selection-start-column="92" selection-end-line="19" selection-end-column="92" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pitally/camera.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="18" column="21" selection-start-line="18" selection-start-column="21" selection-end-line="19" selection-end-column="24" />
-              <folding>
-                <element signature="e#0#13#0" expanded="true" />
-                <marker date="1541561062500" expanded="true" signature="113:118" ph="..." />
-                <marker date="1541561062500" expanded="true" signature="216:221" ph="..." />
-                <marker date="1541561062500" expanded="true" signature="886:963" ph="..." />
-                <marker date="1541561062500" expanded="true" signature="1530:1536" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pitally/templates/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="21" column="22" selection-start-line="21" selection-start-column="22" selection-end-line="21" selection-end-column="22" />
-              <folding>
-                <element signature="n#style#0;n#button#0;n#form#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/setup.py">
+        <entry file="file://$PROJECT_DIR$/pitally/pitally/static/script/script.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="602">
+              <caret line="145" column="68" selection-start-line="145" selection-start-column="68" selection-end-line="145" selection-end-column="68" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pitally/pitally/templates/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="15" column="202" selection-start-line="15" selection-start-column="178" selection-end-line="15" selection-end-column="202" />
+              <folding>
+                <element signature="n#style#0;n#svg#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#div#2;n#div#0;n#div#0;n#!!top" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pitally_update/setup.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="90">
-              <caret line="6" column="30" selection-start-line="6" selection-start-column="15" selection-end-line="6" selection-end-column="30" />
+              <caret line="6" column="29" selection-start-line="6" selection-start-column="29" selection-end-line="6" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pitally_update/bin/pitally_update.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="15" column="76" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="76" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pitally_update/setup.cfg">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pitally_update/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="8" selection-start-line="8" selection-end-line="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pitally/bin/pitally.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="375">
+              <caret line="25" column="4" selection-start-line="25" selection-start-column="4" selection-end-line="26" selection-end-column="79" />
             </state>
           </provider>
         </entry>
@@ -179,25 +192,42 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>down</find>
-      <find>myList</find>
-      <find>conso</find>
-      <find>pref</find>
-      <find>addAllColumnHeaders</find>
-      <find>bootstrapTa</find>
-      <find>red</find>
-      <find>res</find>
-      <find>log(</find>
-      <find>src</find>
-      <find>xli</find>
-      <find>time</find>
-      <find>now</find>
-      <find>tog</find>
+      <find>hide_during_capture</find>
+      <find>table_div</find>
+      <find>read</find>
+      <find>select</find>
+      <find>js.m</find>
+      <find>Constr</find>
+      <find>bootstrapTable</find>
+      <find>show_during_capture</find>
+      <find>prop</find>
+      <find>dat</find>
+      <find>inline</find>
+      <find>non</find>
+      <find>just</find>
+      <find>justi</find>
+      <find>row</find>
+      <find>shutt</find>
+      <find>show_during_capture_only</find>
+      <find>hide</find>
+      <find>inpu</find>
+      <find>span</find>
+      <find>hide_during_</find>
+      <find>table</find>
+      <find>log</find>
+      <find>boo</find>
+      <find>pi</find>
+      <find>up</find>
+      <find>consol</find>
+      <find>show_during_preview_only</find>
+      <find>upd</find>
+      <find>val</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -228,14 +258,39 @@
         <option value="$PROJECT_DIR$/pitally/static/script.js" />
         <option value="$PROJECT_DIR$/pitally/templates/index.html" />
         <option value="$PROJECT_DIR$/setup.py" />
+        <option value="$PROJECT_DIR$/pitally/instance/config.py" />
+        <option value="$PROJECT_DIR$/pitally/MANIFEST.in" />
+        <option value="$PROJECT_DIR$/pitally/pitally/setup.cfg" />
+        <option value="$PROJECT_DIR$/pitally/pitally/app.py" />
+        <option value="$PROJECT_DIR$/pitally/pitally/config.py" />
+        <option value="$PROJECT_DIR$/pitally/bin/pitally.service" />
+        <option value="$PROJECT_DIR$/pitally/pitally/static/script.js" />
+        <option value="$PROJECT_DIR$/pitally/README.md" />
+        <option value="$PROJECT_DIR$/pitally/pitally/camera.py" />
+        <option value="$PROJECT_DIR$/pitally/pitally/static/css/style.css" />
+        <option value="$PROJECT_DIR$/pitally/pitally/templates/layout.html" />
+        <option value="$PROJECT_DIR$/pitally/pitally/static/open-iconic/svg/pitally_animation.svg" />
+        <option value="$PROJECT_DIR$/pitally/pitally/static/svg/pitally_animation.svg" />
+        <option value="$PROJECT_DIR$/pitally_update/setup.py" />
+        <option value="$PROJECT_DIR$/pitally_update/pitally_update/config.py" />
+        <option value="$PROJECT_DIR$/pitally_update/pitally_update/__init__.py" />
+        <option value="$PROJECT_DIR$/pitally/pitally/templates/base.html" />
+        <option value="$PROJECT_DIR$/pitally_update/pitally_update/templates/index.html" />
+        <option value="$PROJECT_DIR$/pitally_update/README.md" />
+        <option value="$PROJECT_DIR$/pitally/setup.py" />
+        <option value="$PROJECT_DIR$/pitally/bin/pitally.sh" />
+        <option value="$PROJECT_DIR$/pitally_update/MANIFEST.in" />
+        <option value="$PROJECT_DIR$/pitally_update/bin/pitally_update.sh" />
+        <option value="$PROJECT_DIR$/pitally/pitally/__init__.py" />
+        <option value="$PROJECT_DIR$/pitally/pitally/templates/index.html" />
+        <option value="$PROJECT_DIR$/pitally/pitally/static/script/script.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="260" />
-    <option name="y" value="53" />
-    <option name="width" value="1400" />
-    <option name="height" value="1000" />
+    <option name="y" value="27" />
+    <option name="width" value="1920" />
+    <option name="height" value="1053" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -262,6 +317,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -269,21 +325,79 @@
               <item name="pitally-git" type="b2602c69:ProjectViewProjectNode" />
               <item name="pitally-git" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="pitally-git" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pitally-git" type="462c0819:PsiDirectoryNode" />
+              <item name="pitally" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pitally-git" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pitally-git" type="462c0819:PsiDirectoryNode" />
+              <item name="pitally" type="462c0819:PsiDirectoryNode" />
+              <item name="bin" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pitally-git" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pitally-git" type="462c0819:PsiDirectoryNode" />
+              <item name="pitally" type="462c0819:PsiDirectoryNode" />
+              <item name="dist" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pitally-git" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pitally-git" type="462c0819:PsiDirectoryNode" />
+              <item name="pitally" type="462c0819:PsiDirectoryNode" />
+              <item name="instance" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pitally-git" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pitally-git" type="462c0819:PsiDirectoryNode" />
+              <item name="pitally" type="462c0819:PsiDirectoryNode" />
+              <item name="pitally" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pitally-git" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pitally-git" type="462c0819:PsiDirectoryNode" />
+              <item name="pitally" type="462c0819:PsiDirectoryNode" />
+              <item name="pitally" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pitally-git" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pitally-git" type="462c0819:PsiDirectoryNode" />
+              <item name="pitally" type="462c0819:PsiDirectoryNode" />
+              <item name="pitally" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="script" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pitally-git" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pitally-git" type="462c0819:PsiDirectoryNode" />
+              <item name="pitally" type="462c0819:PsiDirectoryNode" />
+              <item name="pitally" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+  </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/legacy" />
-      <recent name="$PROJECT_DIR$" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/pitally_update/pitally_update/templates" />
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src/pitally" />
       <recent name="$PROJECT_DIR$/src/pitally/test" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/pitally/pitally/static/css" />
+      <recent name="$PROJECT_DIR$/pitally/pitally/static/script" />
+      <recent name="$PROJECT_DIR$/pitally/pitally/static" />
+      <recent name="$PROJECT_DIR$/pitally/pitally/static/svg" />
+      <recent name="$PROJECT_DIR$/pitally" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -324,7 +438,7 @@
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49674267" visible="true" weight="0.1995731" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49674267" visible="true" weight="0.2145144" />
       <window_info id="Structure" order="1" sideWeight="0.50325733" side_tool="true" weight="0.18890075" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -335,7 +449,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32896176" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32896176" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.3278867" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="10" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -355,71 +469,15 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pitally/camera.py</url>
+          <url>file://$PROJECT_DIR$/pitally/pitally/camera.py</url>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/__init__.py" />
-    <entry file="file://$USER_HOME$/.virtualenvs/pitally/lib/python3.7/site-packages/dash_html_components/Img.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="35" lean-forward="true" selection-start-column="35" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.virtualenvs/pitally/lib/python3.7/site-packages/dash_html_components/A.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="47" column="163" lean-forward="true" selection-start-line="47" selection-start-column="163" selection-end-line="47" selection-end-column="163" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/legacy/src/setup.py" />
-    <entry file="file://$USER_HOME$/.virtualenvs/pitally/lib/python3.7/site-packages/flask/globals.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="855">
-          <caret line="58" selection-start-line="58" selection-end-line="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib64/python3.7/json/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4440">
-          <caret line="298" column="4" selection-start-line="298" selection-start-column="4" selection-end-line="298" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.virtualenvs/pitally/lib/python3.7/site-packages/dash/dependencies.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" selection-start-line="25" selection-end-line="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/requierments.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/instance.py" />
     <entry file="file://$PROJECT_DIR$/pitally.py" />
-    <entry file="file://$PROJECT_DIR$/pitally/views.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pitally/model.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pitally/forms.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pitally/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="22" selection-start-column="22" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.virtualenvs/pitally/lib/python3.7/site-packages/flask/app.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-120">
@@ -427,93 +485,242 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="497">
-          <caret line="70" lean-forward="true" selection-start-line="70" selection-end-line="70" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/legacy/script/flask_server.py" />
     <entry file="file://$PROJECT_DIR$/legacy/script/server.py" />
     <entry file="file://$PROJECT_DIR$/pitally/static/porcelaine-mushroom.jpg" />
-    <entry file="file://$PROJECT_DIR$/app.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="735">
-          <caret line="51" column="39" selection-start-line="51" selection-start-column="39" selection-end-line="51" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#58#0" expanded="true" />
-            <marker date="1541554692433" expanded="true" signature="1048:1049" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pitally/static/script.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1020">
-          <caret line="68" column="12" selection-start-line="68" selection-start-column="12" selection-end-line="68" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/instance/config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pitally/static/bootstrap-table.js">
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/static/script/bootstrap-table.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
           <caret line="6" column="9175" selection-start-line="6" selection-start-column="9164" selection-end-line="6" selection-end-column="9178" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pitally/static/bootstrap-table.css">
+    <entry file="file://$PROJECT_DIR$/pitally/instance/__init__.py" />
+    <entry file="file://$PROJECT_DIR$/pitally/__init__.py" />
+    <entry file="file://$PROJECT_DIR$/pitally/instance/config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="12" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/app.py" />
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/static/script/ekko-lightbox.js.map" />
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/static/script/ekko-lightbox.js" />
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/static/open-iconic/svg/pitally_animation.svg" />
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/static/svg/pitally_animation.svg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/static/open-iconic/font/css/open-iconic.css">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/config.py">
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/static/css/bootstrap-table.css">
       <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret column="26" selection-start-column="26" selection-end-column="26" />
+          <caret column="22" selection-start-column="22" selection-end-column="22" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pitally/templates/layout.html">
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/static/css/style.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="92" selection-start-line="19" selection-start-column="92" selection-end-line="19" selection-end-column="92" />
+        <state>
+          <caret column="31" selection-start-column="31" selection-end-column="31" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pitally/camera.py">
+    <entry file="file://$PROJECT_DIR$/pitally_update/pitally_update/forms.py" />
+    <entry file="file://$PROJECT_DIR$/pitally_update/pitally_update/views.py" />
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="18" column="21" selection-start-line="18" selection-start-column="21" selection-end-line="19" selection-end-column="24" />
+        <state relative-caret-position="195">
+          <caret line="13" column="22" selection-start-line="13" selection-start-column="22" selection-end-line="13" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/templates/layout.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="29" column="75" lean-forward="true" selection-start-line="29" selection-start-column="75" selection-end-line="29" selection-end-column="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally_update/pitally_update/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="49" selection-start-column="49" selection-end-column="49" />
+          <folding>
+            <marker date="1542426865917" expanded="true" signature="1145:1150" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="497">
+          <caret line="70" selection-start-line="70" selection-end-line="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally/bin/pitally.service">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="9" lean-forward="true" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/camera.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="857">
+          <caret line="68" selection-start-line="68" selection-end-line="68" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-            <marker date="1541561062500" expanded="true" signature="113:118" ph="..." />
-            <marker date="1541561062500" expanded="true" signature="216:221" ph="..." />
-            <marker date="1541561062500" expanded="true" signature="886:963" ph="..." />
-            <marker date="1541561062500" expanded="true" signature="1530:1536" ph="..." />
+            <marker date="1541823327942" expanded="true" signature="113:118" ph="..." />
+            <marker date="1541823327942" expanded="true" signature="216:221" ph="..." />
+            <marker date="1541823327942" expanded="true" signature="886:963" ph="..." />
+            <marker date="1541823327942" expanded="true" signature="1530:1536" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pitally/templates/index.html">
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/config.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="22" selection-start-line="21" selection-start-column="22" selection-end-line="21" selection-end-column="22" />
-          <folding>
-            <element signature="n#style#0;n#button#0;n#form#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
+        <state relative-caret-position="30">
+          <caret line="2" column="28" selection-start-line="2" selection-start-column="28" selection-end-line="2" selection-end-column="28" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/setup.py">
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/forms.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/LICENSE">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/model.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/views.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally/MANIFEST.in">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally/README.md">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
-          <caret line="6" column="30" selection-start-line="6" selection-start-column="15" selection-end-line="6" selection-end-column="30" />
+          <caret line="6" column="3" selection-start-line="6" selection-start-column="3" selection-end-line="7" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally_update/bin/pitally.service">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally_update/instance/config.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally_update/pitally_update/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="31" column="19" selection-start-line="31" selection-start-column="19" selection-end-line="31" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally_update/pitally_update/config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally_update/pitally_update/LICENSE">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally_update/pitally_update/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally_update/MANIFEST.in">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="32" selection-start-column="32" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally_update/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="29" selection-start-line="6" selection-start-column="29" selection-end-line="6" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally_update/setup.cfg">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally_update/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" selection-start-line="8" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally_update/bin/pitally_update.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="76" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally/bin/pitally.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="25" column="4" selection-start-line="25" selection-start-column="4" selection-end-line="26" selection-end-column="79" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="17" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally/setup.cfg">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="25" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="51" selection-start-line="5" selection-start-column="51" selection-end-line="5" selection-end-column="51" />
+          <folding>
+            <element signature="e#0#58#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="202" selection-start-line="15" selection-start-column="178" selection-end-line="15" selection-end-column="202" />
+          <folding>
+            <element signature="n#style#0;n#svg#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#div#2;n#div#0;n#div#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pitally/pitally/static/script/script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="602">
+          <caret line="145" column="68" selection-start-line="145" selection-start-column="68" selection-end-line="145" selection-end-column="68" />
         </state>
       </provider>
     </entry>

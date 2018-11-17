@@ -1,0 +1,34 @@
+{% block doc -%}
+<!DOCTYPE html>
+<html{% block html_attribs %}{% endblock html_attribs %}>
+{%- block html %}
+  <head>
+    {%- block head %}
+    <title>Pitally update server</title>
+    {%- endblock head %}
+  </head>
+  <body{% block body_attribs %}{% endblock body_attribs %}>
+
+    <style>
+    .box__dragndrop,
+    .box__uploading,
+    .box__success,
+    .box__error {
+    display: none;
+    }
+    </style>
+    Upload a pitally package file (something like pitally-x.y.tar.gz)
+
+    <form class="box" method="post" action="/" enctype="multipart/form-data">
+  <div class="box__input">
+    <input class="box__file" type="file" name="package_file" id="package_file" />
+<br>
+
+    <button class="box__button" type="submit">Upload</button>
+  </div>
+ </form>
+
+  </body>
+{%- endblock html %}
+</html>
+{% endblock doc -%}

@@ -117,6 +117,10 @@ function preview(){
             $("#preview_image").attr('xlink:href', data.image);
             if($('#preview_toggle').prop("checked") == true){
                 preview();
+
+                var now = new Date();
+                t = now.format("HH:MM:ss");
+                $("#preview_stamp").text("Preview at "+ t);
             }
             },
         error:function(){
@@ -132,13 +136,16 @@ $(function() {
         console.log("preview toggled");
         if($(this).prop("checked") == true){
             $('.hide_during_preview_only').hide();
+            $('.show_during_preview_only').show();
             $('.hide_during_preview_only').prop('disabled', true);
             capture_res = $("#resolution_select option:selected").text();
             $("#resolution_select").val(resolutions[0]);
             preview();
             }
         else{
+            $("#resolution_select option:selected").text(capture_res);
             $('.hide_during_preview_only').show();
+            $('.show_during_preview_only').hide ();
             $('.hide_during_preview_only').prop('disabled', false);
         }
     })
@@ -210,6 +217,7 @@ $(document).ready(function() {
     }
     capture_res = $("#resolution_select option:selected").text();
     $(".search").appendTo("#table_top");
+    $(".show_during_capture_only").hide();
 });
 
 window.onbeforeunload = function() {
