@@ -74,16 +74,22 @@ $(function() {
     time_str = now.format("yyyy-mm-dd'T'HH:MM:ss");
     form = retrieve_form();
 
+    $("#error > code").text("");
     $.ajax({
         url:'/capture/1',
         type:'post',
         data: form,
         success:function(data){
-            data.filename = data.prefix + "_" + time_str + ".jpg"
-            data.selected = true;
-            $("#captured_image").attr('xlink:href', data.image);
-            results.push(data);
-            localStorage.setItem("last_form",form) ;
+            var error = check_error(data);
+            if(error == false){
+
+                data.filename = data.prefix + "_" + time_str + ".jpg"
+                data.selected = true;
+                $("#captured_image").attr('xlink:href', data.image);
+                results.push(data);
+                localStorage.setItem("last_form",form) ;
+                console.log(form);
+                }
         },
         error:function(){
             console.log("error");
@@ -103,7 +109,17 @@ $(function() {
     });
 })
 
+function check_error(data){
+    if('error' in data){
+        $("#error").show();
+        $("#error > code").text("ERROR:\n\n" + data.error);
+        console.log("capture error")
+        return true;
+    }
 
+    $("#error").hide();
+    return false;
+}
 function preview(){
 
     form = retrieve_form();
@@ -115,20 +131,35 @@ function preview(){
         //todo replace by #preview_image
             console.log("preview")
             $("#preview_image").attr('xlink:href', data.image);
+            var error = check_error(data);
             if($('#preview_toggle').prop("checked") == true){
-                preview();
+                if(error ==false){
+                    preview();
+                    var now = new Date();
+                    t = now.format("HH:MM:ss");
+                    $("#preview_stamp").text("Preview at "+ t);
 
-                var now = new Date();
-                t = now.format("HH:MM:ss");
-                $("#preview_stamp").text("Preview at "+ t);
+                }
+                else{
+                    stop_preview();
+                }
             }
             },
         error:function(){
             console.log("error");
             },
         complete:function(){
+
             }
         });
+}
+
+function stop_preview(){
+    console.log("reverting to saved res: "+ capture_res);
+    $("#resolution_select").val(capture_res);
+    $('.hide_during_preview_only').show();
+    $('.show_during_preview_only').hide ();
+    $('.hide_during_preview_only').prop('disabled', false);
 }
 
 $(function() {
@@ -139,14 +170,14 @@ $(function() {
             $('.show_during_preview_only').show();
             $('.hide_during_preview_only').prop('disabled', true);
             capture_res = $("#resolution_select option:selected").text();
+            console.log("saving old res: "+ capture_res);
+            console.log("setting preview resolution: "+ resolutions[0]);
+
             $("#resolution_select").val(resolutions[0]);
             preview();
             }
         else{
-            $("#resolution_select option:selected").text(capture_res);
-            $('.hide_during_preview_only').show();
-            $('.show_during_preview_only').hide ();
-            $('.hide_during_preview_only').prop('disabled', false);
+        stop_preview();
         }
     })
 });
@@ -205,8 +236,9 @@ $(document).ready(function() {
         );
     }
 
-    if (localStorage.results) {
+    if (localStorage.last_form) {
     try{
+        console.log("Loading previous form");
         var last_form = localStorage.getItem("last_form");
         populate_form(last_form);
         }
@@ -215,6 +247,11 @@ $(document).ready(function() {
         }
 
     }
+    else{
+
+        console.log("No previous form!");
+        }
+
     capture_res = $("#resolution_select option:selected").text();
     $(".search").appendTo("#table_top");
     $(".show_during_capture_only").hide();
@@ -228,3 +265,44 @@ window.onbeforeunload = function() {
 //                event.preventDefault();
 //                $(this).ekkoLightbox();
 //            });
+
+
+
+$(function() {
+    $('#restart_camera_button').on('click', function (e) {
+
+    $.ajax({
+        url:'/restart_camera',
+        type:'post',
+        data: {},
+        success:function(data){
+            $("#error > code").text("");
+
+        },
+        error:function(){
+            console.log("error, did not restart the camera");
+            },
+
+        });
+    });
+})
+
+
+$(function() {
+    $('#restart_server_button').on('click', function (e) {
+
+    $.ajax({
+        url:'/stop_server',
+        type:'post',
+        data: {},
+        success:function(data){
+            $("#error > code").text("");
+
+        },
+        error:function(){
+            console.log("error, did not restart the server");
+            },
+
+        });
+    });
+})

@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pitally',
-    version='1.0',
+    version='1.1',
     long_description=__doc__,
     packages=['pitally'],
     scripts=['bin/pitally.sh'],

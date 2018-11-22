@@ -18,7 +18,9 @@ import subprocess
 import sys
 
 def install(package):
-    subprocess.call([sys.executable, "-m", "pip", "install", "--ignore-installed",  package])
+    # todo retreive errors
+    #fixme # does not work without internet. Need --no-deps
+    subprocess.call([sys.executable, "-m", "pip", "install", "--ignore-installed",  "--no-deps",  package])
 
 
 def reload_pitally():

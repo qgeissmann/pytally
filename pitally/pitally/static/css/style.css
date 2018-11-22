@@ -72,3 +72,10 @@
 .checkbox.checbox-switch label  > input:disabled +  span:before{
     background: grey;
    }
+
+code {
+  display: block;
+  white-space: pre-wrap;
+  background: #F5F5F5;
+  color: red;
+}
