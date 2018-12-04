@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{url_for('.static', filename='script/video_script.js')}}"></script>
+{% endblock %}
+
+
+{% block title %}{{super()}} — video{% endblock %}
+
+{% block content %}
+    {{ super() }}
+<div class="container">
+    <div class="row">
+        <div class="col-xl-5 col-lg-12 col-md-12">
+           <svg class="img-fluid" style="width:100%"  viewBox="0 0 640 480">
+
+                    <g class = "sss">
+                    <image id="video_preview_image" xlink:href="" width="100%" height="100%" position="absolute">
+                    </image>
+
+                      <text id="video_preview_stamp" x="15" y="30" fill="black" stroke="rgba(255,255,255,200)" stroke-width="0.5" font-size="32" font-weight="900"></text>
+                    </g>
+
+                </svg>
+        </div>
+
+                <div class="col-xl-3 col-lg-5 col-md-4 col-sm-12 ">
+
+                    <form id="recording_form" method="POST" role="form" class="form" >
+
+                    <div class="form-group row justify-content-between">
+                        <label for="prefix" class="col-form-label.col-4">Prefix</label>
+                         <div class="col-7">
+                            <input type="text" class="form-control" value="my-video" name="prefix" id="prefix">
+                        </div>
+                    </div>
+
+                <button id="record_button"  class="btn btn-primary'" type="submit" style="font-size:14px">
+                <span class="oi oi-camera-slr"></span> Record</button>
+
+                </form>
+
+            </div>
+
+    </div>
+</div>
+{% endblock %}

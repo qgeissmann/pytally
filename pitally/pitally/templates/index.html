@@ -1,5 +1,12 @@
 {% extends "layout.html" %}
 
+
+{% block scripts %}
+{{ super() }}
+<script src="{{url_for('.static', filename='script/script.js')}}"></script>
+{% endblock %}
+
+
 {% block title %}{{super()}} — capture{% endblock %}
 
 {% block content %}
