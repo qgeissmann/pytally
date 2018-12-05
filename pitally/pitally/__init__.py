@@ -4,7 +4,7 @@ from pitally.video_camera_thread import PiCameraVideoThread, DummyCameraVideoThr
 import logging
 import traceback
 import base64
-
+import os
 # http://fancyapps.com/fancybox/3/ lookt at that
 
 app = Flask('pitally', instance_relative_config=True)
@@ -127,11 +127,30 @@ def start_video():
 
     data = request.json
 
-    video_recording_thread = videoRecordingClass(resolution=(1280, 960),
-                                                 video_prefix = "video_test",
-                                                 video_root_dir = "/tmp/",
-                                                 fps=25,
-                                                 bitrate=500000)
+    # to make it simpler to programmatically request capture via curl
+    if data is None:
+        data = request.form
+
+    logging.info(app.config["STATIC_VIDEO_DIR"])
+
+
+    w = int(data["w"])
+    h = int(data["h"])
+    bitrate = int(data["bitrate"])
+    fps = int(data["fps"])
+    prefix = data["prefix"]
+    client_time = data["time"]
+    prefix = client_time + "_" + prefix
+    video_root_dir = os.path.join(app.config["STATIC_VIDEO_DIR"], prefix)
+    os.makedirs(video_root_dir,exist_ok=True)
+
+    logging.info(video_root_dir)
+
+    video_recording_thread = videoRecordingClass(resolution=(w, h),
+                                                 video_prefix = prefix,
+                                                 video_root_dir = video_root_dir,
+                                                 fps=fps,
+                                                 bitrate=bitrate)
 
 
     video_recording_thread.start()
@@ -163,7 +182,8 @@ def video_preview():
     img_str = base64.b64encode(last_image.getvalue())
     image = 'data:image/jpeg;base64,{}'.format(img_str.decode())
     #logging.debug(img_str)
-    out =  {"image": image}
+
+    out =  {"image": image, "video_name": video_recording_thread.video_name}
     return jsonify(out)
 
 

@@ -43,6 +43,10 @@ class PiCameraVideoThread(threading.Thread):
     def last_image(self):
         return self._last_image
 
+    @property
+    def video_name(self):
+        return self._video_prefix
+
     def run(self):
         i = 0
         self._stop_vid = False
@@ -50,9 +54,11 @@ class PiCameraVideoThread(threading.Thread):
         try:
             # picam = self._camera.picam
             picam = self.get_picam_instance()
-            #todo set fps and resolution
+
             time.sleep(1)
-            #todo set fps and such at run, not init
+
+            picam.framerate = self._fps
+            picam.resolution = self._resolution
             picam.start_recording(self._make_video_name(i), bitrate=self._bitrate)
 
             logging.debug("recording %s" % (self._make_video_name(i),))
@@ -84,12 +90,12 @@ class PiCameraVideoThread(threading.Thread):
 
 class DummyPiCam(object):
     _resolution = (1260, 980)
-
+    _framerate = 15
     def wait_recording(self, t):
         time.sleep(2)
 
     def start_recording(self, name, bitrate):
-        logging.info("recordin on %s bitrate %i" % (name, bitrate))
+        logging.info("recording on %s.  bitrate = %i. resolution = %s. fps = %i!" % (name, bitrate, str(self._resolution), self._framerate))
 
     def split_recording(self, name):
         logging.info("split recording")
