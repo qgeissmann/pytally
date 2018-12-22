@@ -1,16 +1,35 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, send_file
 from pitally.camera import DummyCamera, MyPiCamera,  CameraException
 from pitally.video_camera_thread import PiCameraVideoThread, DummyCameraVideoThread
 import logging
 import traceback
 import base64
 import os
-# http://fancyapps.com/fancybox/3/ lookt at that
+import glob
+# http://fancyapps.com/fancybox/3/ look at that
+
+
+def file_in_dir_r(file, dir):
+    file_dir_path = os.path.dirname(file).rstrip("//")
+    dir_path = dir.rstrip("//")
+    if file_dir_path == dir_path:
+        return True
+    elif file_dir_path == "":
+        return False
+    else:
+        return file_in_dir_r(file_dir_path, dir_path)
+
+def set_auto_hostname(interface = "eth0"):
+    import netifaces
+    from subprocess import call
+    add = netifaces.ifaddresses(interface)[netifaces.AF_LINK][0]["addr"]
+    suffix = "".join(add.split(":")[3:6])
+    machine_id ="pitally-" + suffix
+    call(["hostnamectl", "set-hostname", machine_id])
+    return machine_id
 
 app = Flask('pitally', instance_relative_config=True)
 app.config.from_object('pitally.config')
-
-
 
 try:
     app.config.from_pyfile('config.py')
@@ -24,9 +43,13 @@ if app.testing is True:
     videoRecordingClass = DummyCameraVideoThread
     logging.basicConfig(level=logging.DEBUG)
     logging.info("Testing mode ON")
+    MACHINE_ID = "pitally-testing"
+
 else:
     camClass = MyPiCamera
     videoRecordingClass = PiCameraVideoThread
+    MACHINE_ID = set_auto_hostname()
+
 
 cam = camClass()
 video_recording_thread = None
@@ -133,25 +156,23 @@ def start_video():
 
     logging.info(app.config["STATIC_VIDEO_DIR"])
 
-
     w = int(data["w"])
     h = int(data["h"])
     bitrate = int(data["bitrate"])
     fps = int(data["fps"])
-    prefix = data["prefix"]
+    prefix = data["prefix"] # todo replace _ with - in prefix
     client_time = data["time"]
-    prefix = client_time + "_" + prefix
-    video_root_dir = os.path.join(app.config["STATIC_VIDEO_DIR"], prefix)
-    os.makedirs(video_root_dir,exist_ok=True)
+    prefix = client_time + "_" + MACHINE_ID + "_" + prefix # eg. 2018-12-13T12:00:01_pitally-ab01cd_my-video
+    video_root_dir = os.path.join(app.config["STATIC_VIDEO_DIR"], MACHINE_ID, prefix)
+    os.makedirs(video_root_dir, exist_ok=True)
 
     logging.info(video_root_dir)
 
     video_recording_thread = videoRecordingClass(resolution=(w, h),
                                                  video_prefix = prefix,
                                                  video_root_dir = video_root_dir,
-                                                 fps=fps,
-                                                 bitrate=bitrate)
-
+                                                 fps = fps,
+                                                 bitrate = bitrate)
 
     video_recording_thread.start()
     out = data
@@ -169,7 +190,7 @@ def video_preview():
         return jsonify(dict())
 
     elif not video_recording_thread.isAlive():
-        logging.debug("recodring thread is not running")
+        logging.debug("recording thread is not running")
         return jsonify(dict())
 
     last_image = video_recording_thread.last_image
@@ -191,4 +212,27 @@ def video_preview():
 @app.route('/video')
 def video():
     return render_template('video.html')
+
+
+@app.route('/video_index', methods=['GET'])
+def make_index():
+    all_video_files = [y for x in os.walk(app.config["STATIC_VIDEO_DIR"]) for y in glob.glob(os.path.join(x[0], '*.h264'))]
+    #todo make path relative to app.config["STATIC_VIDEO_DIR"])
+    return jsonify(all_video_files)
+
+
+@app.route('/get_video/<path:filepath>')
+def get_video(filepath):
+    logging.info(filepath)
+    #fixme  this is not secure (e.g. "/../../../etc/xxx/xxx")
+    filepath = os.path.join(app.config["STATIC_VIDEO_DIR"], filepath)
+    return send_file(filepath)
+
+@app.route('/rm_video/<path:filepath>')
+def rm_video(filepath):
+    logging.info(filepath)
+    filepath = os.path.join(app.config["STATIC_VIDEO_DIR"], filepath)
+    os.remove(filepath)
+    return ""
+
 
