@@ -19,10 +19,26 @@ then
     [Install]
     WantedBy=multi-user.target" > /etc/systemd/system/pitally.service
 
+    echo "[Unit]
+    Description=Pitally backup server
+    #Wants=ntpd.service
+    #After=ntpd.service
+
+    [Service]
+    Type=simple
+    ExecStart=$(which python3) $(which pitally_backup.py)
+    RestartSec=5
+    Restart=always
+
+    [Install]
+    WantedBy=multi-user.target" > /etc/systemd/system/pitally_backup.service
+
     systemctl daemon-reload
     systemctl enable pitally.service
+    systemctl enable pitally.service
     systemctl restart pitally.service
-    echo "restarting pitally sevice"
+    systemctl restart pitally_backup.service
+    echo "restarting pitally services"
 else
     export FLASK_APP=pitally && python3 -m flask run --host="0.0.0.0" --port 80
 fi

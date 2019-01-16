@@ -3,6 +3,7 @@ from io import BytesIO
 import time
 import logging
 import threading
+import shutil
 
 
 class CameraException(Exception):
@@ -150,6 +151,7 @@ class PiCameraThread(threading.Thread):
         return self._last_image
     def run(self):
         i = 0
+        last_video = ""
         self._stop = False
         try:
             picam = self._camera.picam
@@ -166,7 +168,10 @@ class PiCameraThread(threading.Thread):
                 self._last_image = my_stream
 
                 if time.time() - start_time >= self._VIDEO_CHUNCK_DURATION:
-                    picam.split_recording(self._make_video_name(i))
+                    if last_video != "":
+                        shutil.move("part_" + last_video, last_video)
+                    last_video = self._make_video_name(i)
+                    picam.split_recording("part_" + last_video)
                     # self._write_video_index()
                     start_time = time.time()
                     i += 1
