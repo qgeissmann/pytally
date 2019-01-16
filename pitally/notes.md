@@ -1,3 +1,5 @@
+# non python deps:
+wput tree ipython3
 # setup ftp server
 
 * install bftpd

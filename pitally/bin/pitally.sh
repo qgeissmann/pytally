@@ -26,6 +26,7 @@ then
 
     [Service]
     Type=simple
+    Environment="FAKE_PITALLY='True'"
     ExecStart=$(which python3) $(which pitally_backup.py)
     RestartSec=5
     Restart=always

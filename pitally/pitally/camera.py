@@ -123,7 +123,7 @@ class MyPiCamera(BaseCamera):
 
 
 class PiCameraThread(threading.Thread):
-    _VIDEO_CHUNCK_DURATION = 60 * 5 #s
+    _VIDEO_CHUNCK_DURATION = 60 * 1 #s
     def __init__(self,
                  camera,
                  video_prefix,
@@ -151,30 +151,25 @@ class PiCameraThread(threading.Thread):
         return self._last_image
     def run(self):
         i = 0
-        last_video = ""
         self._stop = False
         try:
             picam = self._camera.picam
             #todo set fps and such at run, not init
-            picam.start_recording(self._make_video_name(i), bitrate=self._bitrate)
+            picam.start_recording( self._make_video_name(i), bitrate=self._bitrate)
             # self._write_video_index()
             start_time = time.time()
-            i += 1
+            #i += 1
             while not self._stop:
                 picam.wait_recording(2)
                 #todo store in local buffer
                 my_stream = BytesIO()
                 picam.capture(my_stream, use_video_port=True, quality=75)
                 self._last_image = my_stream
-
                 if time.time() - start_time >= self._VIDEO_CHUNCK_DURATION:
-                    if last_video != "":
-                        shutil.move("part_" + last_video, last_video)
-                    last_video = self._make_video_name(i)
-                    picam.split_recording("part_" + last_video)
-                    # self._write_video_index()
-                    start_time = time.time()
                     i += 1
+                    picam.split_recording(self._make_video_name(i))
+                    #shutil.move("part_" + self._make_video_name(i) , self._make_video_name(i))
+                    start_time = time.time()
 
             picam.wait_recording(1)
             picam.stop_recording()

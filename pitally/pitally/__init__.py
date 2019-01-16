@@ -6,233 +6,236 @@ import traceback
 import base64
 import os
 import glob
+from datetime import datetime
 # http://fancyapps.com/fancybox/3/ look at that
 
+if not os.environ.get("FAKE_PITALLY"):
 
-def file_in_dir_r(file, dir):
-    file_dir_path = os.path.dirname(file).rstrip("//")
-    dir_path = dir.rstrip("//")
-    if file_dir_path == dir_path:
-        return True
-    elif file_dir_path == "":
-        return False
-    else:
-        return file_in_dir_r(file_dir_path, dir_path)
+    def file_in_dir_r(file, dir):
+        file_dir_path = os.path.dirname(file).rstrip("//")
+        dir_path = dir.rstrip("//")
+        if file_dir_path == dir_path:
+            return True
+        elif file_dir_path == "":
+            return False
+        else:
+            return file_in_dir_r(file_dir_path, dir_path)
 
-def set_auto_hostname(interface = "eth0"):
-    import netifaces
-    from subprocess import call
-    add = netifaces.ifaddresses(interface)[netifaces.AF_LINK][0]["addr"]
-    suffix = "".join(add.split(":")[3:6])
-    machine_id ="pitally-" + suffix
-    call(["hostnamectl", "set-hostname", machine_id])
-    return machine_id
+    def set_auto_hostname(interface = "eth0"):
+        import netifaces
+        from subprocess import call
+        add = netifaces.ifaddresses(interface)[netifaces.AF_LINK][0]["addr"]
+        suffix = "".join(add.split(":")[3:6])
+        machine_id ="pitally-" + suffix
+        call(["hostnamectl", "set-hostname", machine_id])
+        return machine_id
 
-app = Flask('pitally', instance_relative_config=True)
-app.config.from_object('pitally.config')
+    app = Flask('pitally', instance_relative_config=True)
+    app.config.from_object('pitally.config')
 
-try:
-    app.config.from_pyfile('config.py')
-except FileNotFoundError as e:
-    #todo log
-    pass
-
-
-if app.testing is True:
-    camClass = DummyCamera
-    videoRecordingClass = DummyCameraVideoThread
-    logging.basicConfig(level=logging.DEBUG)
-    logging.info("Testing mode ON")
-    MACHINE_ID = "pitally-testing"
-
-else:
-    camClass = MyPiCamera
-    videoRecordingClass = PiCameraVideoThread
-    MACHINE_ID = set_auto_hostname()
-
-
-cam = camClass()
-video_recording_thread = None
-
-def error_decorator(func):
-    """
-    A simple decorator to return an error dict so we can display it the ui
-    """
-    def func_wrapper(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except Exception as ex:
-            logging.error(traceback.format_exc(chain=ex))
-            return jsonify({'error': traceback.format_exc(chain=ex)})
-
-    return func_wrapper
-
-
-@app.route('/capture', methods=['POST'])
-@app.route('/capture/<int:base64>', methods=['POST'])
-@error_decorator
-def capture(base64=0):
-    #todo force syncrhone
-    if video_recording_thread is not None:
-        raise Exception("A video is being acquired, cannot capture a still image until it stops")
-
-    global cam
-    data = request.json
-
-    logging.info(request.json)
-
-    # to make it simpler to programmatically request capture via curl
-    if data is None:
-        data = request.form
-
-    w = int(data["w"])
-    h = int(data["h"])
-    iso = int(data["iso"])
-    awb_gains = (float(data["awb_gain_r"]), float(data["awb_gain_b"]))
-    shutter_speed = int(data["shutter_speed"])
-
-    if cam is None:
-        cam = camClass()
-
-    image = cam.capture((w, h), iso, awb_gains, shutter_speed)
-
-    if base64 == 0:
-        return image
-    image = 'data:image/jpeg;base64,{}'.format(image.decode())
-    out = {"image": image, **data, "results": {}}
-    return jsonify(out)
-
-#
-@app.route('/restart_camera', methods=['POST'])
-#@error_decorator
-def restart_camera():
-    global cam
-
-    cam  = None #
-    cam = camClass()
-    return ""
-
-@app.route('/stop_server', methods=['POST'])
-def stop_server():
-
-    logging.info("stopping the server from post request")
-    func = request.environ.get('werkzeug.server.shutdown')
-    func()
-    return ""
-
-
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-
-
-@app.route('/stop_video', methods=['POST'])
-#@error_decorator
-def stop_video():
-    global video_recording_thread
-    data = request.json
-    video_recording_thread.stop_video()
     try:
-        video_recording_thread.join()
-    finally:
-        video_recording_thread = None
-
-    return "stopping video"#todo
-#
-
-@app.route('/start_video', methods=['POST'])
-# @error_decorator
-def start_video():
-    global video_recording_thread
-    global cam
-    cam = None
-
-    data = request.json
-
-    # to make it simpler to programmatically request capture via curl
-    if data is None:
-        data = request.form
-
-    logging.info(app.config["STATIC_VIDEO_DIR"])
-
-    w = int(data["w"])
-    h = int(data["h"])
-    bitrate = int(data["bitrate"])
-    fps = int(data["fps"])
-    prefix = data["prefix"] # todo replace _ with - in prefix
-    client_time = data["time"]
-    prefix = client_time + "_" + MACHINE_ID + "_" + prefix # eg. 2018-12-13T12:00:01_pitally-ab01cd_my-video
-    video_root_dir = os.path.join(app.config["STATIC_VIDEO_DIR"], MACHINE_ID, prefix)
-    os.makedirs(video_root_dir, exist_ok=True)
-
-    logging.info(video_root_dir)
-
-    video_recording_thread = videoRecordingClass(resolution=(w, h),
-                                                 video_prefix = prefix,
-                                                 video_root_dir = video_root_dir,
-                                                 fps = fps,
-                                                 bitrate = bitrate)
-
-    video_recording_thread.start()
-    out = data
-    return jsonify(out)
+        app.config.from_pyfile('config.py')
+    except FileNotFoundError as e:
+        #todo log
+        pass
 
 
-@app.route('/video_preview', methods=['POST'])
-# @error_decorator
-def video_preview():
+    if app.testing is True:
+        camClass = DummyCamera
+        videoRecordingClass = DummyCameraVideoThread
+        logging.basicConfig(level=logging.DEBUG)
+        logging.info("Testing mode ON")
+        MACHINE_ID = "pitally-testing"
 
-    global video_recording_thread
-    logging.debug("getting preview")
-    if video_recording_thread is None:
-        logging.debug("no recording thread (None)")
-        return jsonify(dict())
-
-    elif not video_recording_thread.isAlive():
-        logging.debug("recording thread is not running")
-        return jsonify(dict())
-
-    last_image = video_recording_thread.last_image
-
-    if last_image is None:
-        logging.debug("No last image yet (None)")
-        return jsonify(dict())
+    else:
+        camClass = MyPiCamera
+        videoRecordingClass = PiCameraVideoThread
+        MACHINE_ID = set_auto_hostname()
 
 
-    img_str = base64.b64encode(last_image.getvalue())
-    image = 'data:image/jpeg;base64,{}'.format(img_str.decode())
-    #logging.debug(img_str)
+    cam = camClass()
+    video_recording_thread = None
 
-    out =  {"image": image, "video_name": video_recording_thread.video_name}
-    return jsonify(out)
+    def error_decorator(func):
+        """
+        A simple decorator to return an error dict so we can display it the ui
+        """
+        def func_wrapper(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except Exception as ex:
+                logging.error(traceback.format_exc(chain=ex))
+                return jsonify({'error': traceback.format_exc(chain=ex)})
 
-
-
-@app.route('/video')
-def video():
-    return render_template('video.html')
-
-
-@app.route('/video_index', methods=['GET'])
-def make_index():
-    all_video_files = [y for x in os.walk(app.config["STATIC_VIDEO_DIR"]) for y in glob.glob(os.path.join(x[0], '*.h264'))]
-    #todo make path relative to app.config["STATIC_VIDEO_DIR"])
-    return jsonify(all_video_files)
+        return func_wrapper
 
 
-@app.route('/get_video/<path:filepath>')
-def get_video(filepath):
-    logging.info(filepath)
-    #fixme  this is not secure (e.g. "/../../../etc/xxx/xxx")
-    filepath = os.path.join(app.config["STATIC_VIDEO_DIR"], filepath)
-    return send_file(filepath)
+    @app.route('/capture', methods=['POST'])
+    @app.route('/capture/<int:base64>', methods=['POST'])
+    @error_decorator
+    def capture(base64=0):
+        #todo force syncrhone
+        if video_recording_thread is not None:
+            raise Exception("A video is being acquired, cannot capture a still image until it stops")
 
-@app.route('/rm_video/<path:filepath>')
-def rm_video(filepath):
-    logging.info(filepath)
-    filepath = os.path.join(app.config["STATIC_VIDEO_DIR"], filepath)
-    os.remove(filepath)
-    return ""
+        global cam
+        data = request.json
+
+        logging.info(request.json)
+
+        # to make it simpler to programmatically request capture via curl
+        if data is None:
+            data = request.form
+
+        w = int(data["w"])
+        h = int(data["h"])
+        iso = int(data["iso"])
+        awb_gains = (float(data["awb_gain_r"]), float(data["awb_gain_b"]))
+        shutter_speed = int(data["shutter_speed"])
+
+        if cam is None:
+            cam = camClass()
+
+        image = cam.capture((w, h), iso, awb_gains, shutter_speed)
+
+        if base64 == 0:
+            return image
+        image = 'data:image/jpeg;base64,{}'.format(image.decode())
+        out = {"image": image, **data, "results": {}}
+        return jsonify(out)
+
+    #
+    @app.route('/restart_camera', methods=['POST'])
+    #@error_decorator
+    def restart_camera():
+        global cam
+
+        cam  = None #
+        cam = camClass()
+        return ""
+
+    @app.route('/stop_server', methods=['POST'])
+    def stop_server():
+
+        logging.info("stopping the server from post request")
+        func = request.environ.get('werkzeug.server.shutdown')
+        func()
+        return ""
 
 
+    @app.route('/')
+    def index():
+        return render_template('index.html')
+
+
+
+    @app.route('/stop_video', methods=['POST'])
+    #@error_decorator
+    def stop_video():
+        global video_recording_thread
+        data = request.json
+        video_recording_thread.stop_video()
+        try:
+            video_recording_thread.join()
+        finally:
+            video_recording_thread = None
+
+        return "stopping video"#todo
+    #
+
+    @app.route('/start_video', methods=['POST'])
+    # @error_decorator
+    def start_video():
+        global video_recording_thread
+        global cam
+        cam = None
+
+        data = request.json
+
+        # to make it simpler to programmatically request capture via curl
+        if data is None:
+            data = request.form
+
+        logging.info(app.config["STATIC_VIDEO_DIR"])
+
+        w = int(data["w"])
+        h = int(data["h"])
+        bitrate = int(data["bitrate"])
+        fps = int(data["fps"])
+        prefix = data["prefix"] # todo replace _ with - in prefix
+        client_time = int(data["time"])
+        client_time = datetime.utcfromtimestamp(client_time/1000).strftime('%Y-%m-%dT%H:%M:%S(UTC)')
+        prefix = client_time + "_" + MACHINE_ID + "_" + prefix # eg. 2018-12-13T12:00:01_pitally-ab01cd_my-video
+        video_root_dir = os.path.join(app.config["STATIC_VIDEO_DIR"], MACHINE_ID, prefix)
+        os.makedirs(video_root_dir, exist_ok=True)
+
+        logging.info(video_root_dir)
+
+        video_recording_thread = videoRecordingClass(resolution=(w, h),
+                                                     video_prefix = prefix,
+                                                     video_root_dir = video_root_dir,
+                                                     fps = fps,
+                                                     bitrate = bitrate)
+
+        video_recording_thread.start()
+        out = data
+        return jsonify(out)
+
+
+    @app.route('/video_preview', methods=['POST'])
+    # @error_decorator
+    def video_preview():
+
+        global video_recording_thread
+        logging.debug("getting preview")
+        if video_recording_thread is None:
+            logging.debug("no recording thread (None)")
+            return jsonify(dict())
+
+        elif not video_recording_thread.isAlive():
+            logging.debug("recording thread is not running")
+            return jsonify(dict())
+
+        last_image = video_recording_thread.last_image
+
+        if last_image is None:
+            logging.debug("No last image yet (None)")
+            return jsonify(dict())
+
+
+        img_str = base64.b64encode(last_image.getvalue())
+        image = 'data:image/jpeg;base64,{}'.format(img_str.decode())
+        #logging.debug(img_str)
+
+        out =  {"image": image, "video_name": video_recording_thread.video_name}
+        return jsonify(out)
+
+
+
+    @app.route('/video')
+    def video():
+        return render_template('video.html')
+
+
+    @app.route('/video_index', methods=['GET'])
+    def make_index():
+        all_video_files = [y for x in os.walk(app.config["STATIC_VIDEO_DIR"]) for y in glob.glob(os.path.join(x[0], '*.h264'))]
+        #todo make path relative to app.config["STATIC_VIDEO_DIR"])
+        return jsonify(all_video_files)
+    #
+    #
+    # @app.route('/get_video/<path:filepath>')
+    # def get_video(filepath):
+    #     logging.info(filepath)
+    #     #fixme  this is not secure (e.g. "/../../../etc/xxx/xxx")
+    #     filepath = os.path.join(app.config["STATIC_VIDEO_DIR"], filepath)
+    #     return send_file(filepath)
+    #
+    # @app.route('/rm_video/<path:filepath>')
+    # def rm_video(filepath):
+    #     logging.info(filepath)
+    #     filepath = os.path.join(app.config["STATIC_VIDEO_DIR"], filepath)
+    #     os.remove(filepath)
+    #     return ""
+    #
+    #

@@ -25,11 +25,11 @@ function video_preview(){
 
                 $("#video_preview_image").attr('xlink:href', data.image);
 
-                $("#video_name").text('xlink:href', data.video_name);
+                $("#video_name").text(data.video_name);
                 var now = new Date();
                 t = now.format("HH:MM:ss");
                 $("#video_preview_stamp").text("Preview at "+ t);
-            }
+                    }
             },
         error:function(){
             console.log("error");
@@ -49,7 +49,8 @@ $(function() {
     e.preventDefault();
 
     var now = new Date();
-    time_str = now.format("yyyy-mm-dd'T'HH:MM:ss");
+    //time_str = now.format("yyyy-mm-dd'T'HH:MM:ss");
+    time_str = now.getTime().toString();
     var form = retrieve_form("#recording_form");
     form = form + "&time=" + time_str
     console.log(form);

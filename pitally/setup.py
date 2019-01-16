@@ -4,7 +4,7 @@ setup(
     name='pitally',
     version='1.2',
     long_description=__doc__,
-    packages=['pitally'],
+    packages=['pitally', 'pitally.utils'],
     scripts=['bin/pitally.sh', 'bin/pitally_backup.py'],
     include_package_data=True,
     zip_safe=False,
