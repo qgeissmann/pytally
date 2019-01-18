@@ -5,16 +5,13 @@
 # written by Benedikt Waldvogel (mail at bwaldvogel.de)
 
 from __future__ import absolute_import, division, print_function
-import logging
 import scapy.config
 import scapy.layers.l2
 import scapy.route
 import socket
 import math
 import errno
-
-logging.basicConfig(format='%(asctime)s %(levelname)-5s %(message)s', datefmt='%Y-%m-%d %H:%M:%S', level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+import logging
 
 
 def long2net(arg):
@@ -28,37 +25,37 @@ def to_CIDR_notation(bytes_network, bytes_netmask):
     netmask = long2net(bytes_netmask)
     net = "%s/%s" % (network, netmask)
     if netmask < 16:
-        logger.warn("%s is too big. skipping" % net)
+        logging.warn("%s is too big. skipping" % net)
         return None
-    print(net)
     return net
 
 
 def scan_and_print_neighbors(net, interface, timeout=5):
-    logger.info("arping %s on %s" % (net, interface))
+    out = {}
     try:
         ans, unans = scapy.layers.l2.arping(net, iface=interface, timeout=timeout, verbose=True)
-        print ((ans,unans))
         for s, r in ans.res:
-            line = r.sprintf("%Ether.src%  %ARP.psrc%")
             try:
                 hostname = socket.gethostbyaddr(r.psrc)
-                line += " " + hostname[0]
+                if hostname and hostname[0].startswith("pitally"):
+                    device = {hostname[0].split(".")[0]: {"mac":r.sprintf("%Ether.src%"),
+                                           "ip": r.sprintf("%ARP.psrc%")}}
+                    out.update(device)
             except socket.herror:
-                print (r.psrc)
                 pass
-            logger.info(line)
+
     except socket.error as e:
         if e.errno == errno.EPERM:     # Operation not permitted
-            logger.error("%s. Did you run as root?", e.strerror)
+            logging.error("%s. Did you run as root?", e.strerror)
         else:
             raise
+    return out
 
 
-if __name__ == "__main__":
+def map_devices():
+    devices = {}
     for network, netmask, _, interface, address, _ in scapy.config.conf.route.routes:
-
-        # skip loopback network and default gw
+    # skip loopback network and default gw
         if network == 0 or interface == 'lo' or address == '127.0.0.1' or address == '0.0.0.0':
             continue
 
@@ -68,4 +65,8 @@ if __name__ == "__main__":
         net = to_CIDR_notation(network, netmask)
 
         if net:
-            scan_and_print_neighbors(net, interface)
+            devs = scan_and_print_neighbors(net, interface)
+            devices.update(devs)
+    return devices
+
+

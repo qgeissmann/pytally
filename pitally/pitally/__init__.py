@@ -1,13 +1,18 @@
 from flask import Flask, request, render_template, jsonify, send_file
 from pitally.camera import DummyCamera, MyPiCamera,  CameraException
 from pitally.video_camera_thread import PiCameraVideoThread, DummyCameraVideoThread
+from pitally.utils.map_devices import map_devices
+
 import logging
 import traceback
 import base64
 import os
 import glob
 from datetime import datetime
+import time
+
 # http://fancyapps.com/fancybox/3/ look at that
+
 
 if not os.environ.get("FAKE_PITALLY"):
 
@@ -52,6 +57,9 @@ if not os.environ.get("FAKE_PITALLY"):
         videoRecordingClass = PiCameraVideoThread
         MACHINE_ID = set_auto_hostname()
 
+    device_info = {"id": MACHINE_ID, "status": "idle", "since": time.time()}
+
+    # id(=hostname), status (idle, recording, capturing, computing, stopping video), name, time,
 
     cam = camClass()
     video_recording_thread = None
@@ -74,7 +82,11 @@ if not os.environ.get("FAKE_PITALLY"):
     @app.route('/capture/<int:base64>', methods=['POST'])
     @error_decorator
     def capture(base64=0):
-        #todo force syncrhone
+        #todo force synchrone
+        global device_info
+        device_info["status"] = "capturing"
+        device_info["since"] = time.time()
+
         if video_recording_thread is not None:
             raise Exception("A video is being acquired, cannot capture a still image until it stops")
 
@@ -102,6 +114,9 @@ if not os.environ.get("FAKE_PITALLY"):
             return image
         image = 'data:image/jpeg;base64,{}'.format(image.decode())
         out = {"image": image, **data, "results": {}}
+
+        device_info["status"] = "idle"
+        device_info["since"] = time.time()
         return jsonify(out)
 
     #
@@ -139,6 +154,8 @@ if not os.environ.get("FAKE_PITALLY"):
             video_recording_thread.join()
         finally:
             video_recording_thread = None
+            device_info["status"] = "idle"
+            device_info["since"] = time.time()
 
         return "stopping video"#todo
     #
@@ -146,24 +163,28 @@ if not os.environ.get("FAKE_PITALLY"):
     @app.route('/start_video', methods=['POST'])
     # @error_decorator
     def start_video():
+        global device_info
         global video_recording_thread
         global cam
+
+        device_info["status"] = "recording"
+        device_info["since"] = time.time()
+
         cam = None
-
         data = request.json
-
         # to make it simpler to programmatically request capture via curl
         if data is None:
             data = request.form
 
-        logging.info(app.config["STATIC_VIDEO_DIR"])
-
         w = int(data["w"])
         h = int(data["h"])
+        duration = int(data["duration"]) * 3600 # h to s
+
         bitrate = int(data["bitrate"])
         fps = int(data["fps"])
-        prefix = data["prefix"] # todo replace _ with - in prefix
+        prefix = data["prefix"] # todo replace _ with - in prefix (only allow for [a-Z]+ - )
         client_time = int(data["time"])
+
         client_time = datetime.utcfromtimestamp(client_time/1000).strftime('%Y-%m-%dT%H:%M:%S(UTC)')
         prefix = client_time + "_" + MACHINE_ID + "_" + prefix # eg. 2018-12-13T12:00:01_pitally-ab01cd_my-video
         video_root_dir = os.path.join(app.config["STATIC_VIDEO_DIR"], MACHINE_ID, prefix)
@@ -175,7 +196,8 @@ if not os.environ.get("FAKE_PITALLY"):
                                                      video_prefix = prefix,
                                                      video_root_dir = video_root_dir,
                                                      fps = fps,
-                                                     bitrate = bitrate)
+                                                     bitrate = bitrate,
+                                                     duration=duration)
 
         video_recording_thread.start()
         out = data
@@ -202,26 +224,39 @@ if not os.environ.get("FAKE_PITALLY"):
             logging.debug("No last image yet (None)")
             return jsonify(dict())
 
-
         img_str = base64.b64encode(last_image.getvalue())
         image = 'data:image/jpeg;base64,{}'.format(img_str.decode())
         #logging.debug(img_str)
 
-        out =  {"image": image, "video_name": video_recording_thread.video_name}
+        out = {"image": image, "video_name": video_recording_thread.video_name}
         return jsonify(out)
-
-
 
     @app.route('/video')
     def video():
         return render_template('video.html')
 
+    @app.route('/list_devices', methods=['GET'])
+    def list_devices():
+        if app.config["FAKE_DEVICE_MAP"]:
+            from pitally.utils.fake_device_map import fake_dev_map
+            return jsonify(fake_dev_map())
 
-    @app.route('/video_index', methods=['GET'])
-    def make_index():
-        all_video_files = [y for x in os.walk(app.config["STATIC_VIDEO_DIR"]) for y in glob.glob(os.path.join(x[0], '*.h264'))]
-        #todo make path relative to app.config["STATIC_VIDEO_DIR"])
-        return jsonify(all_video_files)
+        return jsonify(map_devices())
+
+    @app.route('/device_info', methods=['GET'])
+    def device():
+
+        return jsonify(device_info)
+
+
+
+    # @app.route('/video_index', methods=['GET'])
+    # def make_index():
+    #     all_video_files = [y for x in os.walk(app.config["STATIC_VIDEO_DIR"]) for y in glob.glob(os.path.join(x[0], '*.h264'))]
+    #     #todo make path relative to app.config["STATIC_VIDEO_DIR"])
+    #     return jsonify(all_video_files)
+    #
+
     #
     #
     # @app.route('/get_video/<path:filepath>')

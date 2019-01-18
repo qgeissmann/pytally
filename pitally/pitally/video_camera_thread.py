@@ -15,7 +15,8 @@ class PiCameraVideoThread(threading.Thread):
                  video_prefix,
                  video_root_dir,
                  fps,
-                 bitrate):
+                 bitrate,
+                 duration):
 
 
         self._resolution = resolution
@@ -25,6 +26,7 @@ class PiCameraVideoThread(threading.Thread):
         self._video_root_dir = video_root_dir
         self._stop_vid = None
         self._last_image = None
+        self._duration = duration
         super(PiCameraVideoThread, self).__init__()
     def get_picam_instance(self):
         import picamera
@@ -50,7 +52,7 @@ class PiCameraVideoThread(threading.Thread):
     def run(self):
         i = 0
         self._stop_vid = False
-
+        start_time = time.time()
         try:
             # picam = self._camera.picam
             picam = self.get_picam_instance()
@@ -64,7 +66,7 @@ class PiCameraVideoThread(threading.Thread):
             logging.debug("recording %s" % (self._make_video_name(i),))
             logging.debug(os.getcwd())
             # self._write_video_index()
-            start_time = time.time()
+            start_time_chunk = time.time()
             i += 1
             while not self._stop_vid:
                 picam.wait_recording(2)
@@ -74,12 +76,14 @@ class PiCameraVideoThread(threading.Thread):
                 logging.warning("stream")
                 self._last_image = my_stream
 
-                if time.time() - start_time >= self._VIDEO_CHUNCK_DURATION:
+                if time.time() - start_time_chunk >= self._VIDEO_CHUNCK_DURATION:
                     picam.split_recording(self._make_video_name(i))
                     # self._write_video_index()
-                    start_time = time.time()
+                    start_time_chunk = time.time()
                     i += 1
-
+                if time.time() - start_time > self._duration:
+                    self.stop_video()
+                    
             picam.wait_recording(1)
             picam.stop_recording()
             picam.close()

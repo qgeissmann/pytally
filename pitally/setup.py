@@ -8,5 +8,5 @@ setup(
     scripts=['bin/pitally.sh', 'bin/pitally_backup.py'],
     include_package_data=True,
     zip_safe=False,
-    install_requires=['Flask', "netifaces"]
+    install_requires=['Flask', "netifaces", "scapy"]
 )

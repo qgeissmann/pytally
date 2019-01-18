@@ -1,5 +1,5 @@
 # non python deps:
-wput tree ipython3
+wput tree ipython3 tcpdump nmap
 # setup ftp server
 
 * install bftpd
