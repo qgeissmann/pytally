@@ -1,0 +1,3 @@
+[submodule "pitally/pitally-client"]
+	path = pitally/pitally-client
+	url = https://qgeissmann@github.com/haneylab/pitally-client
