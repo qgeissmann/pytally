@@ -7,11 +7,8 @@ import logging
 import traceback
 import base64
 import os
-import glob
 from datetime import datetime
 import time
-
-# http://fancyapps.com/fancybox/3/ look at that
 
 
 if not os.environ.get("FAKE_PITALLY"):
@@ -83,6 +80,11 @@ if not os.environ.get("FAKE_PITALLY"):
 
         return func_wrapper
 
+    @app.route('/')
+    def index():
+        return app.send_static_file('index.html')
+
+
 
     @app.route('/capture', methods=['POST'])
     @app.route('/capture/<int:base64>', methods=['POST'])
@@ -102,9 +104,6 @@ if not os.environ.get("FAKE_PITALLY"):
         # to make it simpler to programmatically request capture via curl
         if data is None:
             data = request.form
-
-
-        logging.info(data)
 
         w = int(data["w"])
         h = int(data["h"])
@@ -144,10 +143,6 @@ if not os.environ.get("FAKE_PITALLY"):
         func()
         return ""
 
-
-    @app.route('/')
-    def index():
-        return app.send_static_file('index.html')
 
 
     @app.route('/stop_video', methods=['POST'])
@@ -243,7 +238,7 @@ if not os.environ.get("FAKE_PITALLY"):
 
     @app.route('/list_devices', methods=['GET'])
     def list_devices():
-        if app.config["FAKE_DEVICE_MAP"]:
+        if app.config["MOCK_DEVICE_MAP"]:
             from pitally.utils.fake_device_map import fake_dev_map
             return jsonify(fake_dev_map())
 
@@ -253,30 +248,3 @@ if not os.environ.get("FAKE_PITALLY"):
     def device():
 
         return jsonify(device_info)
-
-
-
-    # @app.route('/video_index', methods=['GET'])
-    # def make_index():
-    #     all_video_files = [y for x in os.walk(app.config["STATIC_VIDEO_DIR"]) for y in glob.glob(os.path.join(x[0], '*.h264'))]
-    #     #todo make path relative to app.config["STATIC_VIDEO_DIR"])
-    #     return jsonify(all_video_files)
-    #
-
-    #
-    #
-    # @app.route('/get_video/<path:filepath>')
-    # def get_video(filepath):
-    #     logging.info(filepath)
-    #     #fixme  this is not secure (e.g. "/../../../etc/xxx/xxx")
-    #     filepath = os.path.join(app.config["STATIC_VIDEO_DIR"], filepath)
-    #     return send_file(filepath)
-    #
-    # @app.route('/rm_video/<path:filepath>')
-    # def rm_video(filepath):
-    #     logging.info(filepath)
-    #     filepath = os.path.join(app.config["STATIC_VIDEO_DIR"], filepath)
-    #     os.remove(filepath)
-    #     return ""
-    #
-    #

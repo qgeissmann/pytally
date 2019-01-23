@@ -57,6 +57,7 @@ def map_devices(hostname):
                           "ip": ""}
                }
 
+
     for network, netmask, _, interface, address, _ in scapy.config.conf.route.routes:
     # skip loopback network and default gw
 
@@ -71,7 +72,11 @@ def map_devices(hostname):
         if net:
             devs = scan_and_print_neighbors(net, interface)
             devices.update(devs)
+    out =[]
 
-    return devices
+    for k, d in devices:
+        out.push(d.update({"hostname": k}))
+
+    return out
 
 
