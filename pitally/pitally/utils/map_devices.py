@@ -52,13 +52,17 @@ def scan_and_print_neighbors(net, interface, timeout=5):
     return out
 
 
-def map_devices():
-    devices = {}
+def map_devices(hostname):
+    devices = {hostname: {"mac": "",
+                          "ip": ""}
+               }
+
     for network, netmask, _, interface, address, _ in scapy.config.conf.route.routes:
     # skip loopback network and default gw
-        if network == 0 or interface == 'lo' or address == '127.0.0.1' or address == '0.0.0.0':
-            continue
 
+        logging.debug(interface)
+        if network == 0 or interface == 'lo' or address == '0.0.0.0':
+            continue
         if netmask <= 0 or netmask == 0xFFFFFFFF:
             continue
 
@@ -67,6 +71,7 @@ def map_devices():
         if net:
             devs = scan_and_print_neighbors(net, interface)
             devices.update(devs)
+
     return devices
 
 

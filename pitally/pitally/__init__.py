@@ -35,7 +35,9 @@ if not os.environ.get("FAKE_PITALLY"):
         call(["hostnamectl", "set-hostname", machine_id])
         return machine_id
 
-    app = Flask('pitally', instance_relative_config=True)
+    app = Flask('pitally',
+                instance_relative_config=True,
+                static_url_path='')
     app.config.from_object('pitally.config')
 
     try:
@@ -50,7 +52,11 @@ if not os.environ.get("FAKE_PITALLY"):
         videoRecordingClass = DummyCameraVideoThread
         logging.basicConfig(level=logging.DEBUG)
         logging.info("Testing mode ON")
-        MACHINE_ID = "pitally-testing"
+        import socket
+        # in this case, we use the machine hostname as ID, without setting it
+        MACHINE_ID = socket.gethostname()
+        from flask_cors import CORS
+        CORS(app)
 
     else:
         camClass = MyPiCamera
@@ -93,11 +99,12 @@ if not os.environ.get("FAKE_PITALLY"):
         global cam
         data = request.json
 
-        logging.info(request.json)
-
         # to make it simpler to programmatically request capture via curl
         if data is None:
             data = request.form
+
+
+        logging.info(data)
 
         w = int(data["w"])
         h = int(data["h"])
@@ -140,8 +147,7 @@ if not os.environ.get("FAKE_PITALLY"):
 
     @app.route('/')
     def index():
-        return render_template('index.html')
-
+        return app.send_static_file('index.html')
 
 
     @app.route('/stop_video', methods=['POST'])
@@ -241,7 +247,7 @@ if not os.environ.get("FAKE_PITALLY"):
             from pitally.utils.fake_device_map import fake_dev_map
             return jsonify(fake_dev_map())
 
-        return jsonify(map_devices())
+        return jsonify(map_devices(MACHINE_ID))
 
     @app.route('/device_info', methods=['GET'])
     def device():
