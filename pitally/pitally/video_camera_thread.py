@@ -81,7 +81,7 @@ class PiCameraVideoThread(threading.Thread):
                     # self._write_video_index()
                     start_time_chunk = time.time()
                     i += 1
-                if time.time() - start_time > self._duration:
+                if self._duration > 0  and time.time() - start_time > self._duration:
                     self.stop_video()
                     
             picam.wait_recording(1)

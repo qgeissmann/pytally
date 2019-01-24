@@ -150,15 +150,17 @@ if not os.environ.get("FAKE_PITALLY"):
     def stop_video():
         global video_recording_thread
         data = request.json
-        video_recording_thread.stop_video()
+
         try:
+            video_recording_thread.stop_video()
             video_recording_thread.join()
+
         finally:
             video_recording_thread = None
             device_info["status"] = "idle"
             device_info["since"] = time.time()
 
-        return "stopping video"#todo
+        return device()
     #
 
     @app.route('/start_video', methods=['POST'])
@@ -168,41 +170,48 @@ if not os.environ.get("FAKE_PITALLY"):
         global video_recording_thread
         global cam
 
+        if video_recording_thread is not None:
+            raise Exception("A video is being acquired, cannot record a new one until it stops")
+
         device_info["status"] = "recording"
         device_info["since"] = time.time()
+        try:
+            cam = None
+            data = request.json
 
-        cam = None
-        data = request.json
-        # to make it simpler to programmatically request capture via curl
-        if data is None:
-            data = request.form
+            # to make it simpler to programmatically request capture via curl
+            if data is None:
+                data = request.form
 
-        w = int(data["w"])
-        h = int(data["h"])
-        duration = int(data["duration"]) * 3600 # h to s
+            logging.info(data)
+            w = int(data["w"])
+            h = int(data["h"])
+            duration = int(data["duration"]) * 3600 # h to s
 
-        bitrate = int(data["bitrate"])
-        fps = int(data["fps"])
-        prefix = data["prefix"] # todo replace _ with - in prefix (only allow for [a-Z]+ - )
-        client_time = int(data["time"])
+            bitrate = int(data["bitrate"])
+            fps = int(data["fps"])
+            prefix = data["prefix"] # todo replace _ with - in prefix (only allow for [a-Z]+ - )
+            client_time = int(data["time"])
 
-        client_time = datetime.utcfromtimestamp(client_time/1000).strftime('%Y-%m-%dT%H:%M:%S(UTC)')
-        prefix = client_time + "_" + MACHINE_ID + "_" + prefix # eg. 2018-12-13T12:00:01_pitally-ab01cd_my-video
-        video_root_dir = os.path.join(app.config["STATIC_VIDEO_DIR"], MACHINE_ID, prefix)
-        os.makedirs(video_root_dir, exist_ok=True)
+            client_time = datetime.utcfromtimestamp(client_time/1000).strftime('%Y-%m-%dT%H:%M:%S(UTC)')
+            prefix = client_time + "_" + MACHINE_ID + "_" + prefix # eg. 2018-12-13T12:00:01_pitally-ab01cd_my-video
+            video_root_dir = os.path.join(app.config["STATIC_VIDEO_DIR"], MACHINE_ID, prefix)
+            os.makedirs(video_root_dir, exist_ok=True)
 
-        logging.info(video_root_dir)
+            logging.info(video_root_dir)
 
-        video_recording_thread = videoRecordingClass(resolution=(w, h),
-                                                     video_prefix = prefix,
-                                                     video_root_dir = video_root_dir,
-                                                     fps = fps,
-                                                     bitrate = bitrate,
-                                                     duration=duration)
+            video_recording_thread = videoRecordingClass(resolution=(w, h),
+                                                         video_prefix = prefix,
+                                                         video_root_dir = video_root_dir,
+                                                         fps = fps,
+                                                         bitrate = bitrate,
+                                                         duration=duration)
 
-        video_recording_thread.start()
-        out = data
-        return jsonify(out)
+            video_recording_thread.start()
+        except Exception as e:
+            logging.info(e)
+            stop_video()
+        return device()
 
 
     @app.route('/video_preview', methods=['POST'])
@@ -232,9 +241,6 @@ if not os.environ.get("FAKE_PITALLY"):
         out = {"image": image, "video_name": video_recording_thread.video_name}
         return jsonify(out)
 
-    @app.route('/video')
-    def video():
-        return render_template('video.html')
 
     @app.route('/list_devices', methods=['GET'])
     def list_devices():
