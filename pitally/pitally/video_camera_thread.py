@@ -33,10 +33,13 @@ class PiCameraVideoThread(threading.Thread):
         picam = picamera.PiCamera()
         return picam
 
-    def _make_video_name(self, i):
+    def _make_video_name(self, i, part=True):
         w, h = self._resolution
+        part_pref = ""
+        if part:
+            part_pref = "part_"
         video_info= "%ix%i@%i" % (w, h, self._fps)
-        return '%s_%s_%05d.h264' % (os.path.join(self._video_root_dir, self._video_prefix), video_info, i)
+        return '%s_%s_%05d.h264' % (os.path.join(self._video_root_dir, part_pref + self._video_prefix), video_info, i)
 
     def stop_video(self):
         self._stop_vid = True
@@ -78,11 +81,14 @@ class PiCameraVideoThread(threading.Thread):
 
                 if time.time() - start_time_chunk >= self._VIDEO_CHUNCK_DURATION:
                     picam.split_recording(self._make_video_name(i))
+                    os.rename(self._make_video_name(i-1), self._make_video_name(i-1, part=False)) # the definitive file
                     # self._write_video_index()
                     start_time_chunk = time.time()
                     i += 1
                 if self._duration > 0  and time.time() - start_time > self._duration:
                     self.stop_video()
+                    os.rename(self._make_video_name(i),
+                              self._make_video_name(i, part=False))  # rename the last video on stop
                     
             picam.wait_recording(1)
             picam.stop_recording()

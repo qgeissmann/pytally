@@ -3,6 +3,7 @@
 
 if [[ $* == *--enable-service* ]]
 then
+##################################################################################
     echo "[Unit]
     Description=Pitally server
     #Wants=ntpd.service
@@ -18,7 +19,7 @@ then
 
     [Install]
     WantedBy=multi-user.target" > /etc/systemd/system/pitally.service
-
+##################################################################################
     echo "[Unit]
     Description=Pitally backup server
     #Wants=ntpd.service
@@ -33,6 +34,7 @@ then
 
     [Install]
     WantedBy=multi-user.target" > /etc/systemd/system/pitally_backup.service
+##################################################################################
 
     systemctl daemon-reload
     systemctl enable pitally.service

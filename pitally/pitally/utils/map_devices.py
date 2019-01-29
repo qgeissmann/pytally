@@ -72,11 +72,10 @@ def map_devices(hostname):
         if net:
             devs = scan_and_print_neighbors(net, interface)
             devices.update(devs)
-    out =[]
+    out = []
 
-    for k, d in devices:
-        out.push(d.update({"hostname": k}))
-
+    for k, d in devices.items():
+        out.append(d.update({"hostname": k}))
     return out
 
 

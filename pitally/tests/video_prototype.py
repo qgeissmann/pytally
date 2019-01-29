@@ -77,3 +77,4 @@ video_recording_thread.run()
 while True:
     time.sleep(1)
     print("yo")
+
