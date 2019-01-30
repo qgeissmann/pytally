@@ -87,8 +87,8 @@ class PiCameraVideoThread(threading.Thread):
                     i += 1
                 if self._duration > 0  and time.time() - start_time > self._duration:
                     self.stop_video()
-                    os.rename(self._make_video_name(i),
-                              self._make_video_name(i, part=False))  # rename the last video on stop
+                    os.rename(self._make_video_name(i-1),
+                              self._make_video_name(i-1, part=False))  # rename the last video on stop
                     
             picam.wait_recording(1)
             picam.stop_recording()
