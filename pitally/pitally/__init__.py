@@ -208,9 +208,21 @@ if not os.environ.get("FAKE_PITALLY"):
                                                          duration=duration)
 
             video_recording_thread.start()
+            # wait 30s to have preview, if none, we fail
+            i = 0
+            while i < 30:
+                if video_recording_thread.last_image is not None:
+                    break
+                else:
+                    i = i + 1
+                if i is 30:
+                    raise Exception("Timeout, camera would not start properly")
+                time.sleep(1)
         except Exception as e:
             logging.info(e)
             stop_video()
+            raise e
+
         return device()
 
 
@@ -241,14 +253,13 @@ if not os.environ.get("FAKE_PITALLY"):
         out = {"image": image, "video_name": video_recording_thread.video_name}
         return jsonify(out)
 
-
     @app.route('/list_devices', methods=['GET'])
     def list_devices():
         if app.config["MOCK_DEVICE_MAP"]:
             from pitally.utils.fake_device_map import fake_dev_map
             return jsonify(fake_dev_map())
-
-        return jsonify(map_devices(MACHINE_ID))
+        out = jsonify(map_devices(MACHINE_ID))
+        return out
 
     @app.route('/device_info', methods=['GET'])
     def device():

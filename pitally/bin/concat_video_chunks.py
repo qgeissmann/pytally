@@ -5,7 +5,7 @@ from shutil import copyfile
 import re
 
 
-VIDEO_DIR = "/srv/ftp/videos/"
+VIDEO_DIR = "/home/quentin/Desktop/videos/"
 all_video_dir = glob.glob( VIDEO_DIR + "*/*/", recursive=True)
 
 
@@ -14,11 +14,14 @@ def append_and_delete(seed, tail_file, new_seed_name, mode = "b"):
     with open(tail_file, "r" + mode) as t, open(seed, "a" + mode) as s:
         s.write(t.read())
         print("%s\n=>>\n%s" %(t, s))
-    os.remove(tail_file)
+    #os.remove(tail_file)
     os.rename(seed, new_seed_name)
 
 for vd in all_video_dir:
     finished = False
+    # todo, find any h264 that has no mp4 mirror (makefile?)
+    # ffmpeg  to convert them to mp4
+    # instead of apending, we can use ffmpeg concat!
     while not finished:
         try:
                 seed_file = glob.glob(vd + "*_00000-*.h264")[0]
