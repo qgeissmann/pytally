@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, jsonify, send_file
 from pitally.camera import DummyCamera, MyPiCamera,  CameraException
 from pitally.video_camera_thread import PiCameraVideoThread, DummyCameraVideoThread
 from pitally.utils.map_devices import map_devices
+from pitally._version import __version__ as version
 
 import logging
 import traceback
@@ -60,7 +61,7 @@ if not os.environ.get("FAKE_PITALLY"):
         videoRecordingClass = PiCameraVideoThread
         MACHINE_ID = set_auto_hostname()
 
-    device_info = {"id": MACHINE_ID, "status": "idle", "since": time.time()}
+    device_info = {"id": MACHINE_ID, "status": "idle", "since": time.time(), "software_version": version}
 
     # id(=hostname), status (idle, recording, capturing, computing, stopping video), name, time,
 

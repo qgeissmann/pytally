@@ -38,7 +38,7 @@ then
 
     systemctl daemon-reload
     systemctl enable pitally.service
-    systemctl enable pitally.service
+    systemctl enable pitally_backup.service
     systemctl restart pitally.service
     systemctl restart pitally_backup.service
     echo "restarting pitally services"
