@@ -194,8 +194,8 @@ if not os.environ.get("FAKE_PITALLY"):
             prefix = data["prefix"] # todo replace _ with - in prefix (only allow for [a-Z]+ - )
             client_time = int(data["time"])
 
-            client_time = datetime.utcfromtimestamp(client_time/1000).strftime('%Y-%m-%dT%H:%M:%S(UTC)')
-            prefix = client_time + "_" + MACHINE_ID + "_" + prefix # eg. 2018-12-13T12:00:01_pitally-ab01cd_my-video
+            client_time = datetime.utcfromtimestamp(client_time/1000).strftime('%Y-%m-%dT%H-%M-%S-UTC')
+            prefix = client_time + "_" + MACHINE_ID + "_" + prefix # eg. 2018-12-13T12-00-01-UTC_pitally-ab01cd_my-video
             video_root_dir = os.path.join(app.config["STATIC_VIDEO_DIR"], MACHINE_ID, prefix)
             os.makedirs(video_root_dir, exist_ok=True)
 
