@@ -12,6 +12,7 @@ import socket
 import math
 import errno
 import logging
+from importlib import reload
 
 
 def long2net(arg):
@@ -54,8 +55,11 @@ def scan_and_print_neighbors(net, interface, timeout=5):
 
 def map_devices(hostname):
     devices = {hostname: {"mac": "",
-                          "ip": ""}
+                          "ip": ""  }
                }
+    reload(scapy.config)
+    reload(scapy.layers.l2)
+    reload(scapy.route)
 
 
     for network, netmask, _, interface, address, _ in scapy.config.conf.route.routes:
@@ -74,7 +78,7 @@ def map_devices(hostname):
             devices.update(devs)
     out = []
     for k, d in devices.items():
-        d.update({"hostname": k})
+        d.update({"hostname": k, 'url': "http://%s.lan" % k})
         out.append(d)
 
     return out
