@@ -6,7 +6,7 @@ import os
 import time
 import logging
 
-logging.basicConfig(level=LOGGING_LEVEL)
+# logging.basicConfig(level=LOGGING_LEVEL)
 
 while True:
     logging.debug((STATIC_VIDEO_DIR, FTP))

@@ -9,7 +9,7 @@ setup(
     scripts=['bin/pitally.sh', 'bin/pitally_backup.py'],
     include_package_data=True,
     zip_safe=False,
-    install_requires=['Flask', "netifaces", "scapy"],
+    install_requires=['Flask', "netifaces", "scapy", 'flask_cors'],
     extras_require={
         'production': ['picamera'],
     },

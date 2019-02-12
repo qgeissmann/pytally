@@ -3,13 +3,13 @@ from pitally.camera import DummyCamera, MyPiCamera,  CameraException
 from pitally.video_camera_thread import PiCameraVideoThread, DummyCameraVideoThread
 from pitally.utils.map_devices import map_devices
 from pitally._version import __version__ as version
-
 import logging
 import traceback
 import base64
 import os
 from datetime import datetime
 import time
+from flask_cors import CORS
 
 
 if not os.environ.get("FAKE_PITALLY"):
@@ -27,16 +27,24 @@ if not os.environ.get("FAKE_PITALLY"):
     def set_auto_hostname(interface = "eth0"):
         import netifaces
         from subprocess import call
+        import socket
         add = netifaces.ifaddresses(interface)[netifaces.AF_LINK][0]["addr"]
         suffix = "".join(add.split(":")[3:6])
         machine_id ="pitally-" + suffix
+        hostname = socket.gethostname()
         call(["hostnamectl", "set-hostname", machine_id])
+        if hostname != machine_id:
+            time.sleep(5)
+            logging.warning("Rebooting to update hostname")
+            call(["reboot"])
+
         return machine_id
 
     app = Flask('pitally',
                 instance_relative_config=True,
                 static_url_path='')
     app.config.from_object('pitally.config')
+    CORS(app)
 
     try:
         app.config.from_pyfile('config.py')
@@ -53,8 +61,6 @@ if not os.environ.get("FAKE_PITALLY"):
         import socket
         # in this case, we use the machine hostname as ID, without setting it
         MACHINE_ID = socket.gethostname()
-        from flask_cors import CORS
-        CORS(app)
 
     else:
         camClass = MyPiCamera

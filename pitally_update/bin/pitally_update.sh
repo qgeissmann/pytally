@@ -18,7 +18,7 @@ then
     systemctl daemon-reload
     systemctl enable pitally_update.service
     systemctl restart pitally_update.service
-    echo "restarting pitally_update sevice"
+    echo "restarting pitally_update service"
 else
     export FLASK_APP=pitally_update && python3 -m flask run --host="0.0.0.0" --port 8080
 fi

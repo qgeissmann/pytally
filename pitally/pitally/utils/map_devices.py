@@ -5,14 +5,10 @@
 # written by Benedikt Waldvogel (mail at bwaldvogel.de)
 
 from __future__ import absolute_import, division, print_function
-import scapy.config
-import scapy.layers.l2
-import scapy.route
-import socket
+
 import math
 import errno
 import logging
-from importlib import reload
 
 
 def long2net(arg):
@@ -22,6 +18,7 @@ def long2net(arg):
 
 
 def to_CIDR_notation(bytes_network, bytes_netmask):
+    import scapy.utils
     network = scapy.utils.ltoa(bytes_network)
     netmask = long2net(bytes_netmask)
     net = "%s/%s" % (network, netmask)
@@ -33,6 +30,9 @@ def to_CIDR_notation(bytes_network, bytes_netmask):
 
 def scan_and_print_neighbors(net, interface, timeout=5):
     out = {}
+
+    import scapy.layers.l2
+    import socket
     try:
         ans, unans = scapy.layers.l2.arping(net, iface=interface, timeout=timeout, verbose=True)
         for s, r in ans.res:
@@ -57,10 +57,8 @@ def map_devices(hostname):
     devices = {hostname: {"mac": "",
                           "ip": ""  }
                }
-    reload(scapy.config)
-    reload(scapy.layers.l2)
-    reload(scapy.route)
-
+    import scapy.config
+    import scapy.route
 
     for network, netmask, _, interface, address, _ in scapy.config.conf.route.routes:
     # skip loopback network and default gw

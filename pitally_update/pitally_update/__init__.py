@@ -2,10 +2,12 @@ from flask import Flask, request, render_template
 from werkzeug.utils import secure_filename
 
 import tempfile
-import setuptools
+from flask_cors import CORS
+
 
 app = Flask('pitally_update', instance_relative_config=True)
 app.config.from_object('pitally_update.config')
+CORS(app)
 
 try:
     app.config.from_pyfile('config.py')
@@ -31,6 +33,7 @@ def reload_pitally():
 def update():
     #todo force syncrhone
     #fixme logging
+    # todo production papckage + '.[production]'
     data = request.json
     print(data)
     file = request.files['package_file']
