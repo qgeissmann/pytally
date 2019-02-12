@@ -10,18 +10,22 @@ then
     MOUNT_DIR=/mnt/pitally_root
 
     wget -O $ZIP_IMG $RASPBIAN_URL
-    unzip $ZIP_IMG
+    unzip -o $ZIP_IMG && rm $ZIP_IMG
     IMG_FILE=$(ls *.img)
-    DEV="$(sudo losetup --show -f -P "$IMG_FILE")"
+    DEV="$(losetup --show -f -P "$IMG_FILE")"
     #todo if !exist
-    sudo mkdir $MOUNT_DIR
-    sudo mount ${DEV}p2 $MOUNT_DIR
-    sudo mount ${DEV}p1 $MOUNT_DIR/boot
+    mkdir -p $MOUNT_DIR
+    mount ${DEV}p2 $MOUNT_DIR
+    mount ${DEV}p1 $MOUNT_DIR/boot
 
-    sudo cp $(which qemu-arm-static) ${MOUNT_DIR}/usr/bin
-    sudo cp make_image.sh ${MOUNT_DIR}/root/
-    sudo chmod +x ${MOUNT_DIR}/root/make_image.sh
-    sudo systemd-nspawn  --directory ${MOUNT_DIR} /root/make_image.sh
+    cp $(which qemu-arm-static) ${MOUNT_DIR}/usr/bin
+    cp make_image.sh ${MOUNT_DIR}/root/
+    chmod +x ${MOUNT_DIR}/root/make_image.sh
+    systemd-nspawn  --directory ${MOUNT_DIR} /root/make_image.sh
+
+    umount ${DEV}p1
+    umount ${DEV}p2
+    losetup -d $DEV
 else
     CONFIG=/boot/config.txt
     apt-get update
@@ -42,6 +46,7 @@ else
 
     ## stack
     git clone $GIT_REPO
-    cd pitally/dist_tarballs
-
+    make install -C pitally/
+    rm -rf pitally
+    exit
 fi
