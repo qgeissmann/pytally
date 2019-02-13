@@ -6,16 +6,21 @@ def wput(remote, file, delete = False):
     command_arg_list=  ["wput",
                         "'" + file + "'",
                         "'" + remote + "'",
-                       #  "-R", # if prefix for video worked we could just do "-D"
                           "--tries 3",
                         #
                        ]
+    if delete:
+        command_arg_list.append("-R")
+
     command = " ".join(command_arg_list)
     p = subprocess.Popen(command, shell=True,  stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     stdout, stderr = p.communicate()
-    if delete and len(re.findall("Skipp.*file", stdout.decode('utf-8'))) > 0:
-        os.remove(file)
-        print("Removing " + file)
+    #fixme
+    # also say skipp if connection refused!!!
+    # use -R
+    # if delete and len(re.findall("Skipp.*file", stdout.decode('utf-8'))) > 0:
+    #     os.remove(file)
+    #     print("Removing " + file)
     return stdout
 
 #b"Error: File `/tmp/test1.txt' does not exist. Don't know what to do about this URL.\nNothing done. Try `wput --help'.\n"

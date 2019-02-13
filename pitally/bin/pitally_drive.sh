@@ -5,8 +5,8 @@ if [[ $* == *--enable-service* ]]
 then
     echo "[Unit]
     Description=Drive concatenate tool
-    Wants=bftpd.service
-    After=bftpd.service
+    Wants=bftpd.socket
+    After=bftpd.socket
 
     [Service]
     Type=simple
