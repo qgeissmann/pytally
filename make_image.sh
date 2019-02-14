@@ -2,11 +2,11 @@
 
 GIT_REPO=https://github.com/haneylab/pitally
 RASPBIAN_URL=http://director.downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2018-11-15/2018-11-13-raspbian-stretch-lite.zip
-
+PITALLY_IMG_NAME=$(date "+%Y-%m-%d")_pitally_image.img
 MOUNT_DIR=/mnt/pitally_root
 
 if [[ $* == *--pre-install* ]]
-#if in a chroot =>
+#todo if in a chroot =>
 #if [ "$(stat -c %d:%i /)" != "$(stat -c %d:%i /proc/1/root/.)" ]
 then
     #TMP_OUT=$(mktemp -u --suffix '.zip' pitally_image.XXXXXXX)
@@ -14,6 +14,7 @@ then
 
     wget -O $ZIP_IMG $RASPBIAN_URL
     unzip -o $ZIP_IMG && rm $ZIP_IMG
+    mv raspbian*.img $PITALLY_IMG_NAME
     IMG_FILE=$(ls *.img)
     DEV="$(losetup --show -f -P "$IMG_FILE")"
     #todo if !exist
@@ -24,11 +25,12 @@ then
     cp $(which qemu-arm-static) ${MOUNT_DIR}/usr/bin
     cp make_image.sh ${MOUNT_DIR}/root/
     chmod +x ${MOUNT_DIR}/root/make_image.sh
-    systemd-nspawn  --directory ${MOUNT_DIR} /root/make_image.sh
+        systemd-nspawn  --directory ${MOUNT_DIR} /root/make_image.sh
 
     umount ${DEV}p1
     umount ${DEV}p2
     losetup -d $DEV
+
 else
     CONFIG=/boot/config.txt
     apt-get update
@@ -39,11 +41,11 @@ else
 
     touch /boot/ssh
 
-echo "update_config=1
+echo "
 network={
     ssid="pitally"
     psk="pitally_01234"
-}" >  /etc/wpa_supplicant/wpa_supplicant.conf
+}" >>  /etc/wpa_supplicant/wpa_supplicant.conf
 
     ## camera
     sed s/"INTERACTIVE=True"/"INTERACTIVE=False"/ $(which raspi-config) > /tmp/camera_on.sh && echo "do_camera 1" >> /tmp/camera_on.sh
