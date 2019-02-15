@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, jsonify, send_file
 from pitally.camera import DummyCamera, MyPiCamera,  CameraException
 from pitally.video_camera_thread import PiCameraVideoThread, DummyCameraVideoThread
 from pitally.utils.map_devices import map_devices
+from pitally.utils.first_boot_settings import first_boot
 from pitally._version import __version__ as version
 import logging
 import traceback
@@ -26,7 +27,7 @@ if not os.environ.get("FAKE_PITALLY"):
 
     def set_auto_hostname(interface = "eth0"):
         import netifaces
-        from subprocess import call
+        from subprocess import call, Popen
         import socket
         add = netifaces.ifaddresses(interface)[netifaces.AF_LINK][0]["addr"]
         suffix = "".join(add.split(":")[3:6])
@@ -34,10 +35,8 @@ if not os.environ.get("FAKE_PITALLY"):
         hostname = socket.gethostname()
         call(["hostnamectl", "set-hostname", machine_id])
         if hostname != machine_id:
-            time.sleep(5)
-            logging.warning("Rebooting to update hostname")
-            call(["reboot"])
-
+            first_boot(app)
+            logging.warning("Perfroming first boot")
         return machine_id
 
     app = Flask('pitally',

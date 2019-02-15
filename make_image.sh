@@ -9,15 +9,13 @@ if [[ $* == *--pre-install* ]]
 #todo if in a chroot =>
 #if [ "$(stat -c %d:%i /)" != "$(stat -c %d:%i /proc/1/root/.)" ]
 then
-    #TMP_OUT=$(mktemp -u --suffix '.zip' pitally_image.XXXXXXX)
     ZIP_IMG=image.zip
-
-    wget -O $ZIP_IMG $RASPBIAN_URL
+    wget -O $ZIP_IMG $RASPBIAN_URL -nc
     unzip -o $ZIP_IMG && rm $ZIP_IMG
-    mv raspbian*.img $PITALLY_IMG_NAME
+    mv *raspbian*.img $PITALLY_IMG_NAME
     IMG_FILE=$(ls *.img)
-    DEV="$(losetup --show -f -P "$IMG_FILE")"
-    #todo if !exist
+    DEV="$(losetup --show -f -P "$PITALLY_IMG_NAME")"
+
     mkdir -p $MOUNT_DIR
     mount ${DEV}p2 $MOUNT_DIR
     mount ${DEV}p1 $MOUNT_DIR/boot
@@ -25,31 +23,19 @@ then
     cp $(which qemu-arm-static) ${MOUNT_DIR}/usr/bin
     cp make_image.sh ${MOUNT_DIR}/root/
     chmod +x ${MOUNT_DIR}/root/make_image.sh
-        systemd-nspawn  --directory ${MOUNT_DIR} /root/make_image.sh
-
+    systemd-nspawn  --directory ${MOUNT_DIR} /root/make_image.sh
+    # fixme  not run?
     umount ${DEV}p1
     umount ${DEV}p2
     losetup -d $DEV
 
 else
-    CONFIG=/boot/config.txt
+    touch /boot/ssh
     apt-get update
     apt-get upgrade --assume-yes
     apt-get install wput tree ipython3 tcpdump nmap ffmpeg python3-pip iputils-ping git npm --assume-yes
 
-    echo "pi:pitally_01234"|chpasswd
-
-    touch /boot/ssh
-
-echo "
-network={
-    ssid="pitally"
-    psk="pitally_01234"
-}" >>  /etc/wpa_supplicant/wpa_supplicant.conf
-
-    ## camera
-    sed s/"INTERACTIVE=True"/"INTERACTIVE=False"/ $(which raspi-config) > /tmp/camera_on.sh && echo "do_camera 1" >> /tmp/camera_on.sh
-    sh /tmp/camera_on.sh && rm /tmp/camera_on.sh
+    ## the camera and network are enabled when the machine boots for the first time
 
     ## stack
     git clone $GIT_REPO
