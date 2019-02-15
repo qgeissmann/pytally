@@ -1,17 +1,19 @@
 #!/usr/bin/env bash
 
 GIT_REPO=https://github.com/haneylab/pitally
-RASPBIAN_URL=http://director.downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2018-11-15/2018-11-13-raspbian-stretch-lite.zip
+
+ZIP_IMG=2018-11-13-raspbian-stretch-lite.zip
+RASPBIAN_URL=http://director.downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2018-11-15/$ZIP_IMG
 PITALLY_IMG_NAME=$(date "+%Y-%m-%d")_pitally_image.img
 MOUNT_DIR=/mnt/pitally_root
 
-if [[ $* == *--pre-install* ]]
-#todo if in a chroot =>
-#if [ "$(stat -c %d:%i /)" != "$(stat -c %d:%i /proc/1/root/.)" ]
+set -e
+# if not in chroot
+if [ $(systemd-detect-virt) = 'none' ]
 then
-    ZIP_IMG=image.zip
-    wget -O $ZIP_IMG $RASPBIAN_URL -nc
-    unzip -o $ZIP_IMG && rm $ZIP_IMG
+
+    wget $RASPBIAN_URL -nc
+    unzip -o $ZIP_IMG
     mv *raspbian*.img $PITALLY_IMG_NAME
     IMG_FILE=$(ls *.img)
     DEV="$(losetup --show -f -P "$PITALLY_IMG_NAME")"

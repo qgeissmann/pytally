@@ -17,11 +17,13 @@ def wifi_config(ssid, psk, country = 'US', conf_file="/etc/wpa_supplicant/wpa_su
         f.write(content)
 
 def enable_camera():
-    p = subprocess.Popen('sed s/"INTERACTIVE=True"/"INTERACTIVE=False"/ $(which raspi-config) > /tmp/camera_on.sh && '
-                         'echo "do_camera 1" >> /tmp/camera_on.sh && '
-                         'echo "do_memory_split 256" >> /tmp/camera_on.sh && '
-                         'bash /tmp/camera_on.sh && '
-                         'rm /tmp/camera_on.sh', shell=True)
+    command = 'sed s/"INTERACTIVE=True"/"INTERACTIVE=False"/ $(which raspi-config) > /tmp/camera_on.sh && '\
+                         'echo "do_camera 0" >> /tmp/camera_on.sh && '\
+                         'echo "do_memory_split 256" >> /tmp/camera_on.sh && '\
+                         'bash /tmp/camera_on.sh && '\
+                         'rm /tmp/camera_on.sh'
+
+    p = subprocess.Popen(command, shell=True)
 
     return p.communicate()
 def set_password(password, user="pi"):
