@@ -1,4 +1,4 @@
-from pitally.config import FTP, FTP_HOSTNAME, STATIC_VIDEO_DIR, LOGGING_LEVEL, FTP_PASSWORD, FTP_USER, FTP_DRIVE_PATH
+from pitally.config import FTP, FTP_HOSTNAME, STATIC_VIDEO_DIR, LOGGING_LEVEL, FTP_PASSWORD, FTP_USER
 import glob
 from pitally.utils.wput_wrapper import wput
 from pitally.utils.lftp_mirror_wrapper import lftp_mirror_wrapper
@@ -20,7 +20,7 @@ while True:
     #ping the ftp server and upload the mp4 files to it
     response = os.system("ping -c 1 -w2 " + FTP_HOSTNAME + " > /dev/null 2>&1")
     if response == 0:
-        lftp_mirror_wrapper(FTP_DRIVE_PATH, STATIC_VIDEO_DIR, FTP_USER, FTP_PASSWORD)
+        lftp_mirror_wrapper(FTP, STATIC_VIDEO_DIR, FTP_USER, FTP_PASSWORD)
     else:
         logging.debug("ftp server not reachable, waiting")
     time.sleep(60)
