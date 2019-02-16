@@ -43,6 +43,7 @@ def append_and_delete(seed, tail_file, new_seed_name):
             os.remove(seed)
             os.remove(tail_file)
     finally:
+        logging.info("added %s, to  %s" % (tail_file, seed))
         os.remove(list_file)
 
 def check_md5_vs_name(path):
@@ -71,7 +72,7 @@ def walk_and_concat(video_root_dir):
                         seed_file = os.path.join(os.path.dirname(first_file[0]), basename_without_md5+"-00000" + ".mp4")
                         os.rename(first_file[0], seed_file)
                     else:
-                        logging.warning("Seed file got unexpected md5. Problem during upload?")
+                        logging.warning("Seed file got unexpected md5 %s. Problem during upload?" % first_file[0])
                         time.sleep(1)
                         break
                 else:
@@ -103,7 +104,7 @@ def walk_and_concat(video_root_dir):
                 new_seed_name = os.path.join(seed_dirname,new_seed_name)
                 append_and_delete(seed_file, next_file, new_seed_name)
             else:
-                logging.warning("Seed file got unexpected md5. Problem during upload?")
+                logging.warning("Seed file got unexpected md5 %s. Problem during upload?" % next_file)
                 time.sleep(5)
                 break
 

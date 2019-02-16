@@ -69,15 +69,33 @@ sudo umount -R /dev/loop0p{1,2}
 
 # setup ftp server
 
+yaourt -S pure-ftpd tree ffmpeg
 
-* install bftpd
-* enable bftpd.socket
-* comment out `DENY_LOGIN="Anonymous login disabled."`
-#* set `ALLOWCOMMAND_DELE="yes"`
 
-# push to the server
-* install wput ffmpeg tree
+pure-pw useradd pi -u ftp -d /srv/ftp # pitally_01234
+#pure-pw passwd pi
+pure-pw mkdb
+echo "/bin/false" >> /etc/shells
 
+# We disable the anonymous account.
+ChrootEveryone               no
+NoAnonymous                  no
+PureDB                       /etc/pureftpd.pdb
+AnonymousCantUpload          yes
+CreateHomeDir                yes
+KeepAllFiles                 yes
+MinUID                       14
+AntiWarez                    no
+NoTruncate                   yes
+TLS                          0
+
+
+
+sudo systemctl enable pure-ftpd.service
+#test :
+dd if=/dev/zero of=/tmp/test_ftp count=1024 bs=1024
+wput /tmp/test_ftp  ftp://pi:pitally_01234@localhost
+curl ftp://localhost/tmp/test_ftp > /dev/null
 
 #router
 
@@ -86,3 +104,8 @@ uci commit system
 /etc/init.d/system reload
 
 
+
+for i in $(seq 1 9); do dd if=/dev/zero of=./test_ftp$i.mp4 count=100024 bs=1024; done
+dd if=/dev/zero of=./test_ftp$i.h264 count=100024 bs=1024
+
+lftp -c "open -u pi,pitally_01234 pitally-drive;mirror -R /tmp/test_ftp_dir  /tmp/test_ftp_dir --Remove-source-files --include-glob='*.mp4' -c"

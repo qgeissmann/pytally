@@ -35,7 +35,7 @@ else
     touch /boot/ssh
     apt-get update
     apt-get upgrade --assume-yes
-    apt-get install wput tree ipython3 tcpdump nmap ffmpeg python3-pip iputils-ping git npm --assume-yes
+    apt-get install wput tree ipython3 tcpdump nmap ffmpeg python3-pip iputils-ping git lftp npm --assume-yes
 
     ## the camera and network are enabled when the machine boots for the first time
 
