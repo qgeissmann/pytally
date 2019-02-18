@@ -69,6 +69,9 @@ sudo umount -R /dev/loop0p{1,2}
 
 # setup ftp server
 
+#Install pitally
+
+# setup pureftpd
 yaourt -S pure-ftpd tree ffmpeg
 
 
@@ -77,21 +80,49 @@ pure-pw useradd pi -u ftp -d /srv/ftp # pitally_01234
 pure-pw mkdb
 echo "/bin/false" >> /etc/shells
 
-# We disable the anonymous account.
+echo "
 ChrootEveryone               no
-NoAnonymous                  no
+BrokenClientsCompatibility   no
+MaxClientsNumber             50
+Daemonize                    yes
+ChrootEveryone               no
+BrokenClientsCompatibility   no
+MaxClientsNumber             50
+Daemonize                    yes
+MaxClientsPerIP              8
+VerboseLog                   no
+DisplayDotFiles              yes
+AnonymousOnly                no
+NoAnonymous                 no
+SyslogFacility none
+FortunesFile /etc/pure-ftpd/welcome.msg
+DontResolve                  yes
+MaxIdleTime                  15
 PureDB                       /etc/pureftpd.pdb
-AnonymousCantUpload          yes
-CreateHomeDir                yes
-KeepAllFiles                 yes
-MinUID                       14
+LimitRecursion               10000 8
+AnonymousCanCreateDirs       no
+MaxLoad                      4
 AntiWarez                    no
+Umask                        133:022
+MinUID                       14
+AllowUserFXP                 no
+AllowAnonymousFXP            no
+ProhibitDotFilesWrite        no
+ProhibitDotFilesRead         no
+AutoRename                   no
+AnonymousCantUpload          yes
+AltLog clf:/var/log/pureftpd.log
+KeepAllFiles                 yes
+CreateHomeDir                yes
+MaxDiskUsage                   99
+CustomerProof                yes
 NoTruncate                   yes
-TLS                          0
-
-
+TLS 0
+TLSCipherSuite -S:HIGH:MEDIUM:+TLSv1
+" > /etc/pure-ftpd/pure-ftpd.conf
 
 sudo systemctl enable pure-ftpd.service
+
 #test :
 dd if=/dev/zero of=/tmp/test_ftp count=1024 bs=1024
 wput /tmp/test_ftp  ftp://pi:pitally_01234@localhost
@@ -103,9 +134,3 @@ uci set system.@system[0].hostname='pitally-router'
 uci commit system
 /etc/init.d/system reload
 
-
-
-for i in $(seq 1 9); do dd if=/dev/zero of=./test_ftp$i.mp4 count=100024 bs=1024; done
-dd if=/dev/zero of=./test_ftp$i.h264 count=100024 bs=1024
-
-lftp -c "open -u pi,pitally_01234 pitally-drive;mirror -R /tmp/test_ftp_dir  /tmp/test_ftp_dir --Remove-source-files --include-glob='*.mp4' -c"
