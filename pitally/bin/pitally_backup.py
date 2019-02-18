@@ -22,5 +22,5 @@ while True:
     if response == 0:
         lftp_mirror_wrapper(FTP, STATIC_VIDEO_DIR, FTP_USER, FTP_PASSWORD)
     else:
-        logging.debug("ftp server not reachable, waiting")
+        logging.warning("ftp server not reachable, waiting")
     time.sleep(60)
