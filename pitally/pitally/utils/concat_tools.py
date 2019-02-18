@@ -14,6 +14,7 @@ class BadMatch(Exception):
 
 def merge_and_delete(file_list, output):
     _, list_txt_file = tempfile.mkstemp(prefix = "pitally", suffix=".txt")
+    tmp_out = os.path.join(os.path.dirname(output), ".tmp_" + os.path.basename(output))
     try:
         with open(list_txt_file, 'w') as f:
             for v in file_list:
@@ -24,11 +25,20 @@ def merge_and_delete(file_list, output):
                         "-i", list_txt_file,
                         "-c", "copy",
                         "-y",
-                        "'" + output + "'"
+                        "'" + tmp_out + "'"
                         ]
         command = " ".join(command_arg_list)
-        p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        stream = p.communicate()
+        try:
+            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            stream = p.communicate()
+        except Exception as e:
+            logging.error("Exception while merging videos. Attempting to delete temporary file")
+            try:
+                os.remove(tmp_out)
+            except FileNotFoundError:
+                pass
+            raise e
+
         success = p.returncode == 0
         logging.info("Making %s" % output)
 
@@ -38,6 +48,7 @@ def merge_and_delete(file_list, output):
             #todo dopy owner from previous files instead of hardcoding
             uid = pwd.getpwnam("ftp").pw_uid
             gid = grp.getgrnam("ftp").gr_gid
+            os.rename(tmp_out, output)
             os.chown(output, uid=uid, gid=gid)
             for f in file_list[1:]:
                 os.remove(f)
@@ -69,7 +80,23 @@ def validate_and_rename(dir):
         except BadMatch:
             continue
 def clean_up_old_contigs(dir):
-    pass
+    all_valid = []
+    for vid in glob.glob(dir + "*.mp4"):
+        basename = os.path.basename(vid)
+        match = re.match("^(?P<constant>.*)_(?P<start>\d{5})-(?P<end>\d{5})\.mp4$", basename)
+        if match:
+            match_dict = match.groupdict()
+            start = int(match_dict["start"])
+            end = int(match_dict["end"])
+            all_valid.append({"start": start, "end": end, "path": vid})
+    if len(all_valid) < 2:
+        return None
+    all_valid.sort(key=lambda x: 1e6 * x["start"] - x["end"])
+
+    to_delete = [v for v in all_valid[1:] if v["start"] == 0]
+    for d in to_delete:
+        assert d["start"] == 0 and d["end"] < all_valid[0]["end"]
+        os.remove(d["path"])
 
 def find_next_chunks(dir):
 

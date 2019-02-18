@@ -271,3 +271,33 @@ if not os.environ.get("FAKE_PITALLY"):
     def device():
 
         return jsonify(device_info)
+
+    @app.route('/list_video_on_ftp', methods=['GET'])
+    def list_video_on_ftp():
+        import subprocess
+        import os
+        import re
+        # ftp = app.config["STATIC_VIDEO_DIR"]
+        ftp = 'ftp://pitally-drive'
+        command = 'lftp -e "find /;quit" "%s" | grep -e "^.*_0\{5\}-[0-9]\{5\}\.mp4$"' % ftp
+        p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
+        out, _ = p.communicate()
+        out = out.decode("utf8").split("\n")
+        dir_vid = {}
+        for o in sorted(out):
+            if not o:
+                continue
+            dirname = os.path.dirname(o)
+            basename = os.path.basename(o)
+            dir_vid[dirname] = basename
+        out = []
+        for d, b in dir_vid.items():
+            path = os.path.join(d,b)
+            match = re.search(
+                r"(?P<datetime>.*)_(?P<device>.*)_(?P<prefix>.*)_(?P<w>\d+)x(?P<h>\d+)@(?P<fps>\d+)_(?P<start>\d{5})-(?P<end>\d{5}).mp4",
+                basename)
+            groups = match.groupdict()
+            groups["path"] = path
+            out.append(groups)
+        return jsonify(out)
+
