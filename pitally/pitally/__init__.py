@@ -295,7 +295,7 @@ if not os.environ.get("FAKE_PITALLY"):
             path = os.path.join(d,b)
             match = re.search(
                 r"(?P<datetime>.*)_(?P<device>.*)_(?P<prefix>.*)_(?P<w>\d+)x(?P<h>\d+)@(?P<fps>\d+)_(?P<start>\d{5})-(?P<end>\d{5}).mp4",
-                basename)
+                b)
             groups = match.groupdict()
             groups["path"] = path
             out.append(groups)

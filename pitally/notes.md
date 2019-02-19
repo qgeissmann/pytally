@@ -121,7 +121,10 @@ TLS 0
 TLSCipherSuite -S:HIGH:MEDIUM:+TLSv1
 " > /etc/pure-ftpd/pure-ftpd.conf
 
+sudo chown ftp:ftp /srv/ftp
 sudo systemctl enable pure-ftpd.service
+sudo pitally_drive.sh --enable-service
+
 
 #test :
 dd if=/dev/zero of=/tmp/test_ftp count=1024 bs=1024
