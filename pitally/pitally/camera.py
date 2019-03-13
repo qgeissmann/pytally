@@ -177,12 +177,3 @@ class PiCameraThread(threading.Thread):
         except Exception as e:
             logging.error("Error or starting video record:" + traceback.format_exc(e))
 
-
-class X(object):
-    def __init__(self):
-        self.x=1
-    def __del__(self):
-        print ("del")
-        del self.x
-a = X()
-a = None

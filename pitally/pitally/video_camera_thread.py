@@ -27,6 +27,10 @@ class PiCameraVideoThread(threading.Thread):
         self._stop_vid = None
         self._last_image = None
         self._duration = duration
+        if duration <= 0:
+            self._has_duration = False
+        else:
+            self._has_duration = True
         super(PiCameraVideoThread, self).__init__()
     def get_picam_instance(self):
         import picamera
@@ -56,6 +60,7 @@ class PiCameraVideoThread(threading.Thread):
         i = 0
         self._stop_vid = False
         start_time = time.time()
+        picam = None
         try:
             # picam = self._camera.picam
             picam = self.get_picam_instance()
@@ -85,8 +90,9 @@ class PiCameraVideoThread(threading.Thread):
                     # self._write_video_index()
                     start_time_chunk = time.time()
                     i += 1
-                if self._duration > 0  and time.time() - start_time > self._duration:
+                if self._has_duration and (time.time() - start_time) > self._duration:
                     self.stop_video()
+                    break
 
             picam.wait_recording(1)
             picam.stop_recording()
@@ -98,7 +104,8 @@ class PiCameraVideoThread(threading.Thread):
 
         except Exception as e:
             logging.error(traceback.format_exc(chain=e))
-
+            if picam is not None:
+                picam.stop_recording()
 
 class DummyPiCam(object):
     _resolution = (1260, 980)
@@ -124,6 +131,5 @@ class DummyPiCam(object):
         DummyCamera().make_jpeg_buffer(stream, self._resolution)
 
 class DummyCameraVideoThread(PiCameraVideoThread):
-
     def get_picam_instance(self):
         return DummyPiCam()
