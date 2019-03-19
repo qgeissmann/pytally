@@ -162,10 +162,7 @@ if not os.environ.get("FAKE_PITALLY"):
             video_recording_thread.join()
 
         finally:
-            video_recording_thread = None
-            device_info["status"] = "idle"
-            device_info["since"] = time.time()
-
+            check_video_thread()
         return device()
     #
 
@@ -192,7 +189,7 @@ if not os.environ.get("FAKE_PITALLY"):
             logging.info(data)
             w = int(data["w"])
             h = int(data["h"])
-            duration = int(data["duration"]) * 3600 # h to s
+            duration = float(data["duration"]) * 3600.0 # h to s
 
             bitrate = int(data["bitrate"])
             fps = int(data["fps"])
@@ -240,6 +237,7 @@ if not os.environ.get("FAKE_PITALLY"):
         logging.debug("getting preview")
         if video_recording_thread is None:
             logging.debug("no recording thread (None)")
+            check_video_thread()
             return jsonify(dict())
 
         elif not video_recording_thread.isAlive():
@@ -269,7 +267,7 @@ if not os.environ.get("FAKE_PITALLY"):
 
     @app.route('/device_info', methods=['GET'])
     def device():
-
+        check_video_thread()
         return jsonify(device_info)
 
     @app.route('/list_video_on_ftp', methods=['GET'])
@@ -301,3 +299,12 @@ if not os.environ.get("FAKE_PITALLY"):
             out.append(groups)
         return jsonify(out)
 
+    def  check_video_thread():
+        global device_info
+        global video_recording_thread
+
+        if video_recording_thread is not None:
+            if not video_recording_thread.isAlive():
+                video_recording_thread = None
+                device_info["status"] = "idle"
+                device_info["since"] = time.time()

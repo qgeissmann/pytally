@@ -73,6 +73,8 @@ class PiCameraVideoThread(threading.Thread):
 
             logging.debug("recording %s" % (self._make_video_name(i),))
             logging.debug(os.getcwd())
+            logging.debug("Planned duration = %i" % self._duration)
+
             # self._write_video_index()
             start_time_chunk = time.time()
             i += 1
@@ -91,8 +93,8 @@ class PiCameraVideoThread(threading.Thread):
                     start_time_chunk = time.time()
                     i += 1
                 if self._has_duration and (time.time() - start_time) > self._duration:
+                    logging.debug("Reached max duration, stopping")
                     self.stop_video()
-                    break
 
             picam.wait_recording(1)
             picam.stop_recording()
