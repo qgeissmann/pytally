@@ -80,15 +80,15 @@ class PiCameraVideoThread(threading.Thread):
             i += 1
             while not self._stop_vid:
                 picam.wait_recording(2)
-                #todo store in local buffer
                 my_stream = BytesIO()
                 picam.capture(my_stream, format="jpeg", use_video_port=True, quality=75)
-                logging.warning("stream")
+
                 self._last_image = my_stream
 
                 if time.time() - start_time_chunk >= self._VIDEO_CHUNCK_DURATION:
+                    logging.warning("Making new chunk: %i" % (i,))
                     picam.split_recording(self._make_video_name(i))
-                    os.rename(self._make_video_name(i-1), self._make_video_name(i-1, part=False)) # the definitive file
+                    os.rename(self._make_video_name(i-1), self._make_video_name(i-1, part=False)) # the final file
                     # self._write_video_index()
                     start_time_chunk = time.time()
                     i += 1
@@ -105,6 +105,7 @@ class PiCameraVideoThread(threading.Thread):
             picam.close()
 
         except Exception as e:
+            logging.error('Critical camera failure!!!')
             logging.error(traceback.format_exc(chain=e))
             if picam is not None:
                 picam.stop_recording()
