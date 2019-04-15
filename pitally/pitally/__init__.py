@@ -270,7 +270,7 @@ if not os.environ.get("FAKE_PITALLY"):
     @app.route('/device_info', methods=['GET'])
     def device():
         check_video_thread()
-        device
+        stats()
         return jsonify(device_info)
 
     @app.route('/list_video_on_ftp', methods=['GET'])
@@ -315,6 +315,6 @@ if not os.environ.get("FAKE_PITALLY"):
         global device_info
         statvfs = os.statvfs('/')
         disk_gb_left = statvfs.f_frsize * statvfs.f_bavail / 1024 ** 3
-        percent_disk_use = round(100 * statvfs.f_bavail / statvfs.f_blocks, 1)
+        percent_disk_use = 100.0 - round(100 * statvfs.f_bavail / statvfs.f_blocks, 1)
         device_info["percent_disk_use"] = percent_disk_use
         device_info["disk_gb_left"] = disk_gb_left
