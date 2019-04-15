@@ -231,7 +231,7 @@ if not os.environ.get("FAKE_PITALLY"):
 
     @app.route('/video_preview', methods=['POST'])
     # @error_decorator
-    def video_preview():
+    def video_preview(thumbnail = False):
 
         global video_recording_thread
         logging.debug("getting preview")
@@ -249,6 +249,8 @@ if not os.environ.get("FAKE_PITALLY"):
         if last_image is None:
             logging.debug("No last image yet (None)")
             return jsonify(dict())
+        if thumbnail:
+            pass # TODO resize image here!
 
         img_str = base64.b64encode(last_image.getvalue())
         image = 'data:image/jpeg;base64,{}'.format(img_str.decode())
@@ -268,6 +270,7 @@ if not os.environ.get("FAKE_PITALLY"):
     @app.route('/device_info', methods=['GET'])
     def device():
         check_video_thread()
+        device
         return jsonify(device_info)
 
     @app.route('/list_video_on_ftp', methods=['GET'])
@@ -308,3 +311,10 @@ if not os.environ.get("FAKE_PITALLY"):
                 video_recording_thread = None
                 device_info["status"] = "idle"
                 device_info["since"] = time.time()
+    def stats():
+        global device_info
+        statvfs = os.statvfs('/')
+        disk_gb_left = statvfs.f_frsize * statvfs.f_bavail / 1024 ** 3
+        percent_disk_use = round(100 * statvfs.f_bavail / statvfs.f_blocks, 1)
+        device_info["percent_disk_use"] = percent_disk_use
+        device_info["disk_gb_left"] = disk_gb_left
