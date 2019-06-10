@@ -9,9 +9,14 @@ import traceback
 import base64
 import os
 from datetime import datetime
+
+from pitally.controllers import YRouletteController
+
 import time
 from flask_cors import CORS
 
+# the reference to classes to be use to control hardware at the end of consecutive video clips
+end_of_clip_dict = {"y-roulette": YRouletteController}
 
 if not os.environ.get("FAKE_PITALLY"):
 
@@ -51,7 +56,6 @@ if not os.environ.get("FAKE_PITALLY"):
         #todo log
         pass
 
-
     if app.testing is True:
         camClass = DummyCamera
         videoRecordingClass = DummyCameraVideoThread
@@ -67,8 +71,6 @@ if not os.environ.get("FAKE_PITALLY"):
         MACHINE_ID = set_auto_hostname()
 
     device_info = {"id": MACHINE_ID, "status": "idle", "since": time.time(), "software_version": version}
-
-    # id(=hostname), status (idle, recording, capturing, computing, stopping video), name, time,
 
     cam = camClass()
     video_recording_thread = None
@@ -196,7 +198,25 @@ if not os.environ.get("FAKE_PITALLY"):
             prefix = data["prefix"] # todo replace _ with - in prefix (only allow for [a-Z]+ - )
             client_time = int(data["time"])
 
+            if "clip_duration" in data.keys():
+                clip_duration = int(data["clip_duration"])
+            else:
+                clip_duration = 60 * 5
+
+            if "start_time" in data.keys():
+                start_time = float(data["start_time"])  # in unix time
+            else:
+                start_time = None
+
+            if "end_of_clip_hw_class_name" in data.keys():
+                end_of_clip_hw_class_name = int(data["end_of_clip_hw_class_name"])
+                endOfClipClass = end_of_clip_dict[end_of_clip_hw_class_name]
+            else:
+                endOfClipClass = None
+            end_of_clip_hardware_controller = endOfClipClass()
+
             client_time = datetime.utcfromtimestamp(client_time/1000).strftime('%Y-%m-%dT%H-%M-%S-UTC')
+            # todo set datetime in localhost from remote time! so no need for ntp
             prefix = client_time + "_" + MACHINE_ID + "_" + prefix # eg. 2018-12-13T12-00-01-UTC_pitally-ab01cd_my-video
             video_root_dir = os.path.join(app.config["STATIC_VIDEO_DIR"], MACHINE_ID, prefix)
             os.makedirs(video_root_dir, exist_ok=True)
@@ -208,7 +228,10 @@ if not os.environ.get("FAKE_PITALLY"):
                                                          video_root_dir = video_root_dir,
                                                          fps = fps,
                                                          bitrate = bitrate,
-                                                         duration=duration)
+                                                         duration=duration,
+                                                         start_time=start_time,
+                                                         clip_duration=clip_duration,
+                                                         end_of_clip_hardware_controller=end_of_clip_hardware_controller)
 
             video_recording_thread.start()
             # wait 30s to have preview, if none, we fail

@@ -9,7 +9,7 @@ setup(
     scripts=['bin/pitally.sh', 'bin/pitally_backup.py', 'bin/pitally_drive.sh', 'bin/concat_video_chunks.py'],
     include_package_data=True,
     zip_safe=False,
-    install_requires=['Flask', "netifaces", "scapy", 'flask_cors'],
+    install_requires=['Flask', "netifaces", "scapy", 'flask_cors', 'pyserial'],
     extras_require={
         'production': ['picamera'],
     },

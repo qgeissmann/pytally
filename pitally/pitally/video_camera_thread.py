@@ -6,9 +6,7 @@ import os
 
 from io import BytesIO
 
-
 class PiCameraVideoThread(threading.Thread):
-    _VIDEO_CHUNCK_DURATION = 60 * 5 #s
 
     def __init__(self,
                  resolution,
@@ -16,8 +14,10 @@ class PiCameraVideoThread(threading.Thread):
                  video_root_dir,
                  fps,
                  bitrate,
-                 duration):
-
+                 duration,
+                 start_time=None,
+                 clip_duration=60 * 5,
+                 end_of_clip_hardware_controller=None):
 
         self._resolution = resolution
         self._fps = fps
@@ -27,6 +27,9 @@ class PiCameraVideoThread(threading.Thread):
         self._stop_vid = None
         self._last_image = None
         self._duration = duration
+        self._start_time = start_time
+        self._clip_duration = clip_duration
+        self._end_of_clip_hardware_controller = end_of_clip_hardware_controller
         if duration <= 0:
             self._has_duration = False
         else:
@@ -59,7 +62,15 @@ class PiCameraVideoThread(threading.Thread):
     def run(self):
         i = 0
         self._stop_vid = False
-        start_time = time.time()
+        if not self._start_time:
+            self._start_time = time.time()
+        else:
+            while time.time() < self._start_time:
+                time.sleep(1)
+        if not self._stop_vid:
+            logging.warning("Video stopped before scheduled start (at %i)" % self._start_time)
+            return
+
         picam = None
         try:
             # picam = self._camera.picam
@@ -85,14 +96,16 @@ class PiCameraVideoThread(threading.Thread):
 
                 self._last_image = my_stream
 
-                if time.time() - start_time_chunk >= self._VIDEO_CHUNCK_DURATION:
+                if time.time() - start_time_chunk >= self._clip_duration:
+                    if self._end_of_clip_hardware_controller:
+                        self._end_of_clip_hardware_controller.send(i)
                     logging.warning("Making new chunk: %i" % (i,))
                     picam.split_recording(self._make_video_name(i))
                     os.rename(self._make_video_name(i-1), self._make_video_name(i-1, part=False)) # the final file
                     # self._write_video_index()
                     start_time_chunk = time.time()
                     i += 1
-                if self._has_duration and (time.time() - start_time) > self._duration:
+                if self._has_duration and (time.time() - self._start_time) > self._duration:
                     logging.debug("Reached max duration, stopping")
                     self.stop_video()
 
