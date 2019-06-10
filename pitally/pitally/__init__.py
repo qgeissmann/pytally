@@ -3,14 +3,15 @@ from pitally.camera import DummyCamera, MyPiCamera,  CameraException
 from pitally.video_camera_thread import PiCameraVideoThread, DummyCameraVideoThread
 from pitally.utils.map_devices import map_devices
 from pitally.utils.first_boot_settings import first_boot
+from pitally.controllers import YRouletteController
+
+
 from pitally._version import __version__ as version
 import logging
 import traceback
 import base64
 import os
 from datetime import datetime
-
-from pitally.controllers import YRouletteController
 
 import time
 from flask_cors import CORS

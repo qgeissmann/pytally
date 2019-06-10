@@ -69,9 +69,9 @@ class YRouletteController(BaseInterface):
         return
 
     def send(self, *args, **kwargs):
-        self._serial.write("S")
+        self._serial.write(b'S\r\n')
         pass
 
     def _warm_up(self):
-        self._serial.write("W")
+        self._serial.write(b'W\r\n')
         pass

@@ -48,6 +48,9 @@ class PiCameraVideoThread(threading.Thread):
         video_info= "%ix%i@%i" % (w, h, self._fps)
         return '%s_%s_%05d.h264' % (os.path.join(self._video_root_dir, part_pref + self._video_prefix), video_info, i)
 
+    def _rename_part_file(self, i):
+        os.rename(self._make_video_name(i - 1), self._make_video_name(i - 1, part=False))  # the final file
+
     def stop_video(self):
         self._stop_vid = True
 
@@ -67,9 +70,9 @@ class PiCameraVideoThread(threading.Thread):
         else:
             while time.time() < self._start_time:
                 time.sleep(1)
-        if not self._stop_vid:
-            logging.warning("Video stopped before scheduled start (at %i)" % self._start_time)
-            return
+                if self._stop_vid:
+                    logging.warning("Video stopped before scheduled start (at %i)" % self._start_time)
+                    return
 
         picam = None
         try:
@@ -101,7 +104,7 @@ class PiCameraVideoThread(threading.Thread):
                         self._end_of_clip_hardware_controller.send(i)
                     logging.warning("Making new chunk: %i" % (i,))
                     picam.split_recording(self._make_video_name(i))
-                    os.rename(self._make_video_name(i-1), self._make_video_name(i-1, part=False)) # the final file
+                    self._rename_part_file(i)
                     # self._write_video_index()
                     start_time_chunk = time.time()
                     i += 1
@@ -111,10 +114,7 @@ class PiCameraVideoThread(threading.Thread):
 
             picam.wait_recording(1)
             picam.stop_recording()
-
-            os.rename(self._make_video_name(i - 1),
-                      self._make_video_name(i - 1, part=False))  # rename the last video on stop
-
+            self._rename_part_file(i)
             picam.close()
 
         except Exception as e:
@@ -149,3 +149,7 @@ class DummyPiCam(object):
 class DummyCameraVideoThread(PiCameraVideoThread):
     def get_picam_instance(self):
         return DummyPiCam()
+
+    def _rename_part_file(self, i):
+        logging.info("%s -> %s", self._make_video_name(i - 1), self._make_video_name(i - 1, part=False))  # the final file
+
