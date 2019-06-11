@@ -11,6 +11,7 @@ import logging
 import traceback
 import base64
 import os
+import time
 from datetime import datetime
 
 import time
@@ -204,17 +205,23 @@ if not os.environ.get("FAKE_PITALLY"):
             else:
                 clip_duration = 60 * 5
 
-            if "start_time" in data.keys():
-                start_time = float(data["start_time"])  # in unix time
-            else:
-                start_time = None
+            start_time = None
+            if "start_time" in data.keys() and data["start_time"] != "":
+                t1 = datetime.strptime(data["start_time"], "%Y-%m-%d %H:%M:%S")
+                t0 = datetime.strptime("1970-01-01 00:00:00", "%Y-%m-%d %H:%M:%S")
+                start_time  = (t1 - t0).total_seconds()
+                if start_time < time.time():
+                    raise Exception("Video set to start in the past %i" % start_time)
+
+
+
+            end_of_clip_hardware_controller = None
 
             if "end_of_clip_hw_class_name" in data.keys():
-                end_of_clip_hw_class_name = int(data["end_of_clip_hw_class_name"])
-                endOfClipClass = end_of_clip_dict[end_of_clip_hw_class_name]
-            else:
-                endOfClipClass = None
-            end_of_clip_hardware_controller = endOfClipClass()
+                end_of_clip_hw_class_name = data["end_of_clip_hw_class_name"]
+                if end_of_clip_hw_class_name != "None":
+                    endOfClipClass = end_of_clip_dict[end_of_clip_hw_class_name]
+                    end_of_clip_hardware_controller = endOfClipClass()
 
             client_time = datetime.utcfromtimestamp(client_time/1000).strftime('%Y-%m-%dT%H-%M-%S-UTC')
             # todo set datetime in localhost from remote time! so no need for ntp
