@@ -205,15 +205,6 @@ if not os.environ.get("FAKE_PITALLY"):
             else:
                 clip_duration = 60 * 5
 
-            start_time = None
-            if "start_time" in data.keys() and data["start_time"] != "":
-                t1 = datetime.strptime(data["start_time"], "%Y-%m-%d %H:%M:%S")
-                t0 = datetime.strptime("1970-01-01 00:00:00", "%Y-%m-%d %H:%M:%S")
-                start_time  = (t1 - t0).total_seconds()
-                if start_time < time.time():
-                    raise Exception("Video set to start in the past %i" % start_time)
-
-
 
             end_of_clip_hardware_controller = None
 
@@ -222,6 +213,15 @@ if not os.environ.get("FAKE_PITALLY"):
                 if end_of_clip_hw_class_name != "None":
                     endOfClipClass = end_of_clip_dict[end_of_clip_hw_class_name]
                     end_of_clip_hardware_controller = endOfClipClass()
+
+            if "start_time" in data.keys() and data["start_time"] != "":
+                t1 = datetime.strptime(data["start_time"], "%Y-%m-%d %H:%M:%S")
+                t0 = datetime.strptime("1970-01-01 00:00:00", "%Y-%m-%d %H:%M:%S")
+                start_time = (t1 - t0).total_seconds()
+                if start_time < time.time():
+                    raise Exception("Video set to start in the past %i" % start_time)
+            else:
+                start_time = client_time/1000
 
             client_time = datetime.utcfromtimestamp(client_time/1000).strftime('%Y-%m-%dT%H-%M-%S-UTC')
             # todo set datetime in localhost from remote time! so no need for ntp

@@ -65,14 +65,11 @@ class PiCameraVideoThread(threading.Thread):
     def run(self):
         i = 0
         self._stop_vid = False
-        if not self._start_time:
-            self._start_time = time.time()
-        else:
-            while time.time() < self._start_time:
-                time.sleep(1)
-                if self._stop_vid:
-                    logging.warning("Video stopped before scheduled start (at %i)" % self._start_time)
-                    return
+        while time.time() < self._start_time:
+            time.sleep(1)
+            if self._stop_vid:
+                logging.warning("Video stopped before scheduled start (at %i)" % self._start_time)
+                return
 
         picam = None
         try:
@@ -90,23 +87,20 @@ class PiCameraVideoThread(threading.Thread):
             logging.debug("Planned duration = %i" % self._duration)
 
             # self._write_video_index()
-            start_time_chunk = time.time()
+            # start_time_chunk = time.time()
             i += 1
             while not self._stop_vid:
                 picam.wait_recording(2)
                 my_stream = BytesIO()
                 picam.capture(my_stream, format="jpeg", use_video_port=True, quality=75)
-
                 self._last_image = my_stream
 
-                if time.time() - start_time_chunk >= self._clip_duration:
+                if time.time() > self._start_time + ((i + 1) * self._clip_duration):
                     if self._end_of_clip_hardware_controller:
                         self._end_of_clip_hardware_controller.send(i)
                     logging.warning("Making new chunk: %i" % (i,))
                     picam.split_recording(self._make_video_name(i))
                     self._rename_part_file(i)
-                    # self._write_video_index()
-                    start_time_chunk = time.time()
                     i += 1
                 if self._has_duration and (time.time() - self._start_time) > self._duration:
                     logging.debug("Reached max duration, stopping")
