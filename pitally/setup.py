@@ -5,7 +5,7 @@ setup(
     name='pitally',
     version=__version__,
     long_description=__doc__,
-    packages=['pitally', 'pitally.utils'],
+    packages=['pitally', 'pitally.server', 'pitally.utils'],
     scripts=['bin/pitally.sh', 'bin/pitally_backup.py', 'bin/pitally_drive.sh', 'bin/concat_video_chunks.py'],
     include_package_data=True,
     zip_safe=False,
