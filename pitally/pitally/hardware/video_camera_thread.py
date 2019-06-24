@@ -3,8 +3,8 @@ import threading
 import logging
 import traceback
 import os
-
 from io import BytesIO
+
 
 class PiCameraVideoThread(threading.Thread):
 
@@ -15,7 +15,7 @@ class PiCameraVideoThread(threading.Thread):
                  fps,
                  bitrate,
                  duration,
-                 start_time=None,
+                 start_time=time.time(),
                  clip_duration=60 * 5,
                  end_of_clip_hardware_controller=None):
 
@@ -65,6 +65,7 @@ class PiCameraVideoThread(threading.Thread):
     def run(self):
         i = 0
         self._stop_vid = False
+
         while time.time() < self._start_time:
             time.sleep(1)
             if self._stop_vid:
@@ -98,7 +99,7 @@ class PiCameraVideoThread(threading.Thread):
                 if time.time() > self._start_time + ((i + 1) * self._clip_duration):
                     if self._end_of_clip_hardware_controller:
                         self._end_of_clip_hardware_controller.send(i)
-                    logging.warning("Making new chunk: %i" % (i,))
+                    logging.info("Making new chunk: %i" % (i,))
                     picam.split_recording(self._make_video_name(i))
                     self._rename_part_file(i)
                     i += 1
@@ -136,9 +137,10 @@ class DummyPiCam(object):
         logging.info("closing cam")
 
     def capture(self, stream, format, use_video_port, quality):
-        from pitally.camera import DummyCamera
+        from pitally.hardware.camera import DummyCamera
         logging.info("capturing snapshot for preview")
         DummyCamera().make_jpeg_buffer(stream, self._resolution)
+
 
 class DummyCameraVideoThread(PiCameraVideoThread):
     def get_picam_instance(self):

@@ -1,10 +1,8 @@
 from pitally.config import FTP, FTP_HOSTNAME, STATIC_VIDEO_DIR, LOGGING_LEVEL, FTP_PASSWORD, FTP_USER
 import glob
-from pitally.utils.wput_wrapper import wput
-from pitally.utils.lftp_mirror_wrapper import lftp_mirror_wrapper
-from pitally.utils.h246_to_mp4 import h264_to_mp4
+from pitally.utils import lftp_mirror_wrapper
+from pitally.utils import h264_to_mp4
 import os
-import time
 import logging
 
 

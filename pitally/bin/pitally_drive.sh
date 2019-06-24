@@ -10,7 +10,6 @@ After=pure-ftpd.service
 
 [Service]
 Type=simple
-Environment="FAKE_PITALLY='True'"
 ExecStart=$(which python3) $(which concat_video_chunks.py)" > /etc/systemd/system/pitally_concat.service --cleanup
 
 echo "[Unit]

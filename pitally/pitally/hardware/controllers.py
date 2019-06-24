@@ -1,5 +1,6 @@
 import logging
 import time
+from serial.tools import list_ports
 
 
 class BaseInterface(object):
@@ -41,7 +42,6 @@ class YRouletteController(BaseInterface):
         super(YRouletteController, self).__init__(*args, **kwargs)
 
     def _find_port(self):
-        from serial.tools import list_ports
         # import serial
         import os
         all_port_tuples = list_ports.comports()

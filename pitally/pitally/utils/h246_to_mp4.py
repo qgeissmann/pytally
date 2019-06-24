@@ -3,7 +3,8 @@ import re
 import subprocess
 import logging
 import tempfile
-from pitally.utils.last_bytes_md5 import last_bytes_md5
+from pitally.utils import last_bytes_md5
+
 
 def h264_to_mp4(input, output=None, remove_h264=False, add_md5_suffix=True):
     basename = os.path.splitext(os.path.basename(input))[0]

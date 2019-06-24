@@ -27,7 +27,6 @@ Description=Pitally backup server
 
 [Service]
 Type=simple
-Environment="FAKE_PITALLY='True'"
 ExecStart=$(which python3) $(which pitally_backup.py)
 RestartSec=5
 Restart=always
@@ -43,7 +42,7 @@ WantedBy=multi-user.target" > /etc/systemd/system/pitally_backup.service
     systemctl restart pitally_backup.service
     echo "restarting pitally services"
 else
-    export FLASK_APP=pitally && python3 -m flask run --host="0.0.0.0" --port 80
+    export FLASK_APP=pitally.server && python3 -m flask run --host="0.0.0.0" --port 80
 fi
 
 

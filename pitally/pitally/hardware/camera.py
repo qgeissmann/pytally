@@ -3,7 +3,6 @@ from io import BytesIO
 import time
 import logging
 import threading
-import shutil
 
 
 class CameraException(Exception):
