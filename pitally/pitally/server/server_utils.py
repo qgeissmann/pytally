@@ -26,7 +26,7 @@ def file_in_dir_r(file, dir):
         return file_in_dir_r(file_dir_path, dir_path)
 
 
-def set_auto_hostname(interface = "eth0"):
+def set_auto_hostname(app, interface = "eth0"):
     add = netifaces.ifaddresses(interface)[netifaces.AF_LINK][0]["addr"]
     suffix = "".join(add.split(":")[3:6])
     machine_id ="pitally-" + suffix
@@ -34,7 +34,7 @@ def set_auto_hostname(interface = "eth0"):
     call(["hostnamectl", "set-hostname", machine_id])
     if hostname != machine_id:
         first_boot(app)
-        logging.warning("Perfroming first boot")
+        logging.warning("Performing first boot")
     return machine_id
 
 

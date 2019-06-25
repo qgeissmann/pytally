@@ -43,9 +43,9 @@ if app.testing is True:
     MACHINE_ID = socket.gethostname()
 
 else:
+    MACHINE_ID = set_auto_hostname(app)
     camClass = MyPiCamera
     videoRecordingClass = PiCameraVideoThread
-    MACHINE_ID = set_auto_hostname()
 
 device_info = {"id": MACHINE_ID, "status": "idle", "since": time.time(), "software_version": version}
 

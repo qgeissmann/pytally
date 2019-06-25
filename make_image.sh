@@ -7,11 +7,11 @@ RASPBIAN_URL=http://director.downloads.raspberrypi.org/raspbian_lite/images/rasp
 PITALLY_IMG_NAME=$(date "+%Y-%m-%d")_pitally_image.img
 MOUNT_DIR=/mnt/pitally_root
 
-set -e
+
 # if not in chroot
 if [ $(systemd-detect-virt) = 'none' ]
 then
-
+    set -e
     wget $RASPBIAN_URL -nc
     unzip -o $ZIP_IMG
     mv *raspbian*.img $PITALLY_IMG_NAME
@@ -25,6 +25,8 @@ then
     cp $(which qemu-arm-static) ${MOUNT_DIR}/usr/bin
     cp make_image.sh ${MOUNT_DIR}/root/
     chmod +x ${MOUNT_DIR}/root/make_image.sh
+
+    set +e
     systemd-nspawn  --directory ${MOUNT_DIR} /root/make_image.sh
     # fixme  not run?
     umount ${DEV}p1
@@ -36,10 +38,10 @@ else
     apt-get update
     apt-get upgrade --assume-yes
     #fixme hack around small image size
-    rm  -r /var/cache/
+    apt-get clean
     apt-get install wput tree ipython3 tcpdump nmap ffmpeg python3-pip iputils-ping git lftp npm --assume-yes
     #fixme hack around small image size
-    rm  -r /var/cache/
+     apt-get clean
     ## the camera and network are enabled when the machine boots for the first time
 
     ## stack
