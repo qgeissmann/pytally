@@ -8,17 +8,18 @@ import threading
 class CameraException(Exception):
     pass
 
+
 try:
     from picamera import PiCamera, PiCameraError
 except ImportError:
     pass
+
 
 class BaseCamera(object):
     def __init__(self):
         pass
     def capture(self, resolution,):
         raise(NotImplementedError)
-
 
 
 class DummyCamera(BaseCamera):
@@ -52,7 +53,6 @@ class DummyCamera(BaseCamera):
 
         image.save(stream, format="JPEG")
 
-
     def capture(self, resolution,
                 iso=200,
                 awb_gains=(1,1),
@@ -78,6 +78,7 @@ class DummyCamera(BaseCamera):
     # def picam(self):
     #     return self._picam
 
+
 class MyPiCamera(BaseCamera):
     def __init__(self):
 
@@ -89,7 +90,6 @@ class MyPiCamera(BaseCamera):
         self._pi_camera.framerate = 10
         self._pi_camera.exposure_mode = 'off'
         self._pi_camera.awb_mode = 'off'
-
 
         super(MyPiCamera,self).__init__()
 
@@ -118,11 +118,9 @@ class MyPiCamera(BaseCamera):
             return img_str
 
 
-
-
-
 class PiCameraThread(threading.Thread):
     _VIDEO_CHUNCK_DURATION = 60 * 1 #s
+
     def __init__(self,
                  camera,
                  video_prefix,
@@ -145,9 +143,11 @@ class PiCameraThread(threading.Thread):
 
     def stop(self):
         self._stop = True
+
     @property
     def last_image(self):
         return self._last_image
+
     def run(self):
         i = 0
         self._stop = False
