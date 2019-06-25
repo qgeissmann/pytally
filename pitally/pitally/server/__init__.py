@@ -15,7 +15,7 @@ from pitally.hardware.video_camera_thread import PiCameraVideoThread, DummyCamer
 from pitally.utils.map_devices import map_devices
 # from pitally.utils.first_boot_settings import first_boot
 from pitally.hardware.controllers import YRouletteController
-from .utils import *
+from .server_utils import *
 
 
 # the reference to classes to be use to control hardware at the end of consecutive video clips
