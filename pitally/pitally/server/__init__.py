@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-
 import logging
+
 import traceback
 import base64
 import os
@@ -24,6 +24,7 @@ end_of_clip_dict = {"y-roulette": YRouletteController}
 app = Flask('pitally.server',
             instance_relative_config=True,
             static_url_path='')
+
 app.config.from_object('pitally.config')
 CORS(app)
 
@@ -33,7 +34,16 @@ except FileNotFoundError as e:
     #todo log
     pass
 
-if app.testing is True:
+
+ENVIRONMENT_TESTING = os.environ.get("TESTING", default=False)
+
+if ENVIRONMENT_TESTING.lower() in ("f", "false"):
+    ENVIRONMENT_TESTING = False
+else:
+    ENVIRONMENT_TESTING = True
+
+
+if app.testing is True or ENVIRONMENT_TESTING is True:
     camClass = DummyCamera
     videoRecordingClass = DummyCameraVideoThread
     logging.basicConfig(level=logging.DEBUG)
@@ -70,6 +80,9 @@ def index():
     return app.send_static_file('index.html')
 
 
+
+logging.warning(app.root_path)
+print(app.root_path)
 
 @app.route('/capture', methods=['POST'])
 @app.route('/capture/<int:base64>', methods=['POST'])
@@ -278,6 +291,13 @@ def device():
     check_video_thread()
     stats()
     return jsonify(device_info)
+
+@app.route('/debug_info', methods=['GET'])
+def debug_info():
+    out = {'root_path': app.root_path}
+    return jsonify(out)
+
+
 
 @app.route('/list_video_on_ftp', methods=['GET'])
 def list_video_on_ftp():

@@ -1,3 +1,2 @@
-recursive-include pitally/templates *
-recursive-include pitally/static *
+recursive-include pitally/server/static *
 
