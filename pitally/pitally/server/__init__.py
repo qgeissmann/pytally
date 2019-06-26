@@ -188,9 +188,6 @@ def start_video():
         prefix = data["prefix"] # todo replace _ with - in prefix (only allow for [a-Z]+ - )
         #client_time = int(data["time"])
         experiment_start_time = int(data["time"])
-        #fixme use NTP{
-
-        time.clock_settime(time.CLOCK_REALTIME, data["time"])
 
         if "clip_duration" in data.keys():
             clip_duration = int(data["clip_duration"])

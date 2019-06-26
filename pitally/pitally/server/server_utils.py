@@ -61,16 +61,10 @@ def set_password(password, user="pi"):
     return p.communicate()
 
 
-def set_ntp(app, ntp_conf_file="/etc/ntp.conf"):
-    conf = ['server %s' % app.config["FTP_HOSTNAME"],
-     'server 127.127.1.0',
-     'fudge 127.127.1.0 stratum 10',
-     'restrict default kod limited nomodify nopeer noquery notrap',
-     'restrict 127.0.0.1',
-     'restrict ::1',
-     'driftfile /var/lib/ntp/ntp.drift']
+def set_ntp(app, ntp_conf_file="/etc/systemd/timesyncd.conf"):
+    line = "FallbackNTP=%s\n" % app.config["FTP_HOSTNAME"]
     with open(ntp_conf_file, "w") as f:
-        f.writelines(conf)
+        f.write(line)
 
 
 def first_boot(app):
