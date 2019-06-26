@@ -28,7 +28,7 @@ then
 
     set +e
     systemd-nspawn  --directory ${MOUNT_DIR} /root/make_image.sh
-    # fixme  not run?
+
     umount ${DEV}p1
     umount ${DEV}p2
     losetup -d $DEV

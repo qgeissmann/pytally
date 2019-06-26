@@ -35,9 +35,9 @@ except FileNotFoundError as e:
     pass
 
 
-ENVIRONMENT_TESTING = os.environ.get("TESTING", default=False)
+ENVIRONMENT_TESTING = os.environ.get("TESTING", default='False')
 
-if ENVIRONMENT_TESTING and ENVIRONMENT_TESTING.lower() in ("f", "false"):
+if ENVIRONMENT_TESTING.lower() in ("f", "false"):
     ENVIRONMENT_TESTING = False
 else:
     ENVIRONMENT_TESTING = True
