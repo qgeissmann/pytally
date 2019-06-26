@@ -41,7 +41,11 @@ else
     apt-get clean
     apt-get install wput tree ipython3 tcpdump nmap ffmpeg python3-pip iputils-ping git lftp npm --assume-yes
     #fixme hack around small image size
-     apt-get clean
+    apt-get clean
+
+    pip3 install --upgrade pip
+    apt-get remove python3-pip
+
     ## the camera and network are enabled when the machine boots for the first time
 
     ## stack
