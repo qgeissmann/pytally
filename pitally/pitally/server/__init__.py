@@ -186,13 +186,16 @@ def start_video():
         bitrate = int(data["bitrate"])
         fps = int(data["fps"])
         prefix = data["prefix"] # todo replace _ with - in prefix (only allow for [a-Z]+ - )
-        client_time = int(data["time"])
+        #client_time = int(data["time"])
+        experiment_start_time = int(data["time"])
+        #fixme use NTP{
+
+        time.clock_settime(time.CLOCK_REALTIME, data["time"])
 
         if "clip_duration" in data.keys():
             clip_duration = int(data["clip_duration"])
         else:
             clip_duration = 60 * 5
-
 
         end_of_clip_hardware_controller = None
 
@@ -209,11 +212,11 @@ def start_video():
             if start_time < time.time():
                 raise Exception("Video set to start in the past %i" % start_time)
         else:
-            start_time = client_time/1000
+            start_time = time.time()
 
-        client_time = datetime.utcfromtimestamp(client_time/1000).strftime('%Y-%m-%dT%H-%M-%S-UTC')
+        experiment_start_time  = datetime.utcfromtimestamp(experiment_start_time/1000).strftime('%Y-%m-%dT%H-%M-%S-UTC')
         # todo set datetime in localhost from remote time! so no need for ntp
-        prefix = client_time + "_" + MACHINE_ID + "_" + prefix # eg. 2018-12-13T12-00-01-UTC_pitally-ab01cd_my-video
+        prefix = experiment_start_time  + "_" + MACHINE_ID + "_" + prefix # eg. 2018-12-13T12-00-01-UTC_pitally-ab01cd_my-video
         video_root_dir = os.path.join(app.config["STATIC_VIDEO_DIR"], MACHINE_ID, prefix)
         os.makedirs(video_root_dir, exist_ok=True)
 
@@ -344,3 +347,4 @@ def stats():
     percent_disk_use = 100.0 - round(100 * statvfs.f_bavail / statvfs.f_blocks, 1)
     device_info["percent_disk_use"] = percent_disk_use
     device_info["disk_gb_left"] = disk_gb_left
+    device_info["datetime"] = datetime.utcfromtimestamp(time.time()).isoformat()

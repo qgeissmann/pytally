@@ -61,8 +61,16 @@ def set_password(password, user="pi"):
     return p.communicate()
 
 
-def set_ntp():
-    pass
+def set_ntp(app, ntp_conf_file="/etc/ntp.conf"):
+    conf = ['server %s' % app.config["FTP_HOSTNAME"],
+     'server 127.127.1.0',
+     'fudge 127.127.1.0 stratum 10',
+     'restrict default kod limited nomodify nopeer noquery notrap',
+     'restrict 127.0.0.1',
+     'restrict ::1',
+     'driftfile /var/lib/ntp/ntp.drift']
+    with open(ntp_conf_file, "w") as f:
+        f.writelines(conf)
 
 
 def first_boot(app):
@@ -70,6 +78,7 @@ def first_boot(app):
                 app.config["NETWORK_PSK"],
                 app.config["NETWORK_COUNTRY"])
     enable_camera()
-    set_ntp()
+    set_ntp(app)
     set_password(app.config["PI_PASSWORD"])
     subprocess.call(["reboot"])
+
