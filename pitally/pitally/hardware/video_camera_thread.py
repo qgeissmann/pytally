@@ -74,11 +74,12 @@ class PiCameraVideoThread(threading.Thread):
 
         picam = None
         try:
+            i = 0
+            if self._end_of_clip_hardware_controller:
+                self._end_of_clip_hardware_controller.send(i)
             # picam = self._camera.picam
             picam = self.get_picam_instance()
-
             time.sleep(1)
-
             picam.framerate = self._fps
             picam.resolution = self._resolution
             picam.start_recording(self._make_video_name(i), bitrate=self._bitrate)
@@ -89,27 +90,28 @@ class PiCameraVideoThread(threading.Thread):
 
             # self._write_video_index()
             # start_time_chunk = time.time()
-            i += 1
+            # i += 1
+
             while not self._stop_vid:
                 picam.wait_recording(2)
                 my_stream = BytesIO()
                 picam.capture(my_stream, format="jpeg", use_video_port=True, quality=75)
                 self._last_image = my_stream
 
-                if time.time() > self._start_time + ((i + 1) * self._clip_duration):
+                if time.time() > self._start_time + (i + 1) * self._clip_duration:
+                    i += 1
                     if self._end_of_clip_hardware_controller:
                         self._end_of_clip_hardware_controller.send(i)
                     logging.info("Making new chunk: %i" % (i,))
                     picam.split_recording(self._make_video_name(i))
                     self._rename_part_file(i)
-                    i += 1
                 if self._has_duration and (time.time() - self._start_time) > self._duration:
                     logging.debug("Reached max duration, stopping")
                     self.stop_video()
 
             picam.wait_recording(1)
             picam.stop_recording()
-            self._rename_part_file(i)
+            self._rename_part_file(i + 1)
             picam.close()
 
         except Exception as e:

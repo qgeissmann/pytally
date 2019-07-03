@@ -1,6 +1,7 @@
 import subprocess
 import os
 
+
 def last_bytes_md5(file, n=1024):
     if not os.path.exists(file):
         raise FileNotFoundError("%s does not exist" % file)

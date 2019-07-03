@@ -3,13 +3,14 @@ import re
 import subprocess
 import logging
 import tempfile
-from pitally.utils import last_bytes_md5
+from pitally.utils.last_bytes_md5 import last_bytes_md5
 
 
 def h264_to_mp4(input, output=None, remove_h264=False, add_md5_suffix=True):
     basename = os.path.splitext(os.path.basename(input))[0]
     #todo forbid _ in prefix, in client
-    match = re.search(r"(?P<datetime>.*)_(?P<device>.*)_(?P<prefix>.*)_(?P<w>\d+)x(?P<h>\d+)@(?P<fps>\d+)_(?P<id>\d+)", basename)
+    match = re.search(r"(?P<datetime>.*)_(?P<device>.*)_(?P<prefix>.*)_(?P<w>\d+)x(?P<h>\d+)@(?P<fps>\d+)_(?P<id>\d+)",
+                      basename)
     groups = match.groupdict()
     _, tmp_file = tempfile.mkstemp(suffix=".mp4", prefix="pitally_")
     try:

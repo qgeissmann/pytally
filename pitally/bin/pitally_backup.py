@@ -16,9 +16,9 @@ for filename in glob.iglob(STATIC_VIDEO_DIR + "**/*.h264", recursive=True):
         try:
             o = h264_to_mp4(filename, remove_h264=True)
             logging.info("Converted to %s" % o)
-        except:
-            logging.info("Conversion failed")
-
+        except Exception as e:
+            logging.error("Conversion failed")
+            logging.error(e)
 
 #ping the ftp server and upload the mp4 files to it
 response = os.system("ping -c 1 -w2 " + FTP_HOSTNAME + " > /dev/null 2>&1")

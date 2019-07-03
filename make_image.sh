@@ -44,7 +44,7 @@ else
     apt-get clean
 
     pip3 install --upgrade pip
-    apt-get remove python3-pip
+    apt-get remove python3-pip --assume-yes
 
     ## the camera and network are enabled when the machine boots for the first time
 
