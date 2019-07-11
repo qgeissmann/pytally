@@ -63,14 +63,8 @@ class PiCameraVideoThread(threading.Thread):
         return self._video_prefix
 
     def run(self):
-        i = 0
         self._stop_vid = False
 
-        while time.time() < self._start_time:
-            time.sleep(1)
-            if self._stop_vid:
-                logging.warning("Video stopped before scheduled start (at %i)" % self._start_time)
-                return
 
         picam = None
         try:
@@ -82,21 +76,32 @@ class PiCameraVideoThread(threading.Thread):
             time.sleep(1)
             picam.framerate = self._fps
             picam.resolution = self._resolution
-            picam.start_recording(self._make_video_name(i), bitrate=self._bitrate)
+
+
+
+            # while time.time() < self._start_time:
+            #     time.sleep(1)
+            #     if self._stop_vid:
+            #         logging.warning("Video stopped before scheduled start (at %i)" % self._start_time)
+            #         return
 
             logging.debug("recording %s" % (self._make_video_name(i),))
             logging.debug(os.getcwd())
             logging.debug("Planned duration = %i" % self._duration)
 
-            # self._write_video_index()
-            # start_time_chunk = time.time()
-            # i += 1
-
             while not self._stop_vid:
-                picam.wait_recording(2)
+                if picam.recording:
+                    picam.wait_recording(2)
+                else:
+                    time.sleep(2)
+
                 my_stream = BytesIO()
                 picam.capture(my_stream, format="jpeg", use_video_port=True, quality=75)
                 self._last_image = my_stream
+
+                if time.time() > self._start_time:
+                    if not picam.recording:
+                        picam.start_recording(self._make_video_name(i), bitrate=self._bitrate)
 
                 if time.time() > self._start_time + (i + 1) * self._clip_duration:
                     i += 1
@@ -123,11 +128,15 @@ class PiCameraVideoThread(threading.Thread):
 class DummyPiCam(object):
     _resolution = (1260, 980)
     _framerate = 15
+    _recording = False
     def wait_recording(self, t):
         time.sleep(2)
-
+    @property
+    def recording(self):
+        return self._recording
     def start_recording(self, name, bitrate):
         logging.info("recording on %s.  bitrate = %i. resolution = %s. fps = %i!" % (name, bitrate, str(self._resolution), self._framerate))
+        self._recording = True
 
     def split_recording(self, name):
         logging.info("split recording")

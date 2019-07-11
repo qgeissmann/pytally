@@ -150,9 +150,9 @@ def stop_video():
     data = request.json
 
     try:
-        video_recording_thread.stop_video()
-        video_recording_thread.join()
-
+        if video_recording_thread is not None:
+            video_recording_thread.stop_video()
+            video_recording_thread.join()
     finally:
         check_video_thread()
     return device()
