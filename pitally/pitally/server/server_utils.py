@@ -63,7 +63,8 @@ def set_password(password, user="pi"):
 
 def set_ntp(app, ntp_conf_file="/etc/systemd/timesyncd.conf"):
     lines = ["[Time]\n",
-            "FallbackNTP=%s\n" % app.config["FTP_HOSTNAME"]]
+             "NTP=0.arch.pool.ntp.org 1.arch.pool.ntp.org 2.arch.pool.ntp.org 3.arch.pool.ntp.org\n",
+             "FallbackNTP=%s\n" % app.config["FTP_HOSTNAME"]]
     with open(ntp_conf_file, "w") as f:
         f.writelines(lines)
 

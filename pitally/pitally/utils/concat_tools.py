@@ -7,7 +7,7 @@ import pwd
 import grp
 import glob
 
-from pitally import last_bytes_md5
+from pitally.utils.last_bytes_md5 import last_bytes_md5
 
 class BadMatch(Exception):
     pass

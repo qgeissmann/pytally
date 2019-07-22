@@ -2,8 +2,8 @@
 
 GIT_REPO=https://github.com/haneylab/pitally
 
-ZIP_IMG=2018-11-13-raspbian-stretch-lite.zip
-RASPBIAN_URL=http://director.downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2018-11-15/$ZIP_IMG
+ZIP_IMG=2019-07-10-raspbian-buster-lite.zip
+RASPBIAN_URL=http://director.downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-07-12/$ZIP_IMG
 PITALLY_IMG_NAME=$(date "+%Y-%m-%d")_pitally_image.img
 MOUNT_DIR=/mnt/pitally_root
 
@@ -42,6 +42,8 @@ else
     apt-get install wput tree ipython3 tcpdump nmap ffmpeg python3-pip iputils-ping git lftp npm --assume-yes
     #fixme hack around small image size
     apt-get clean
+
+    SKIP_WARNING=1 rpi-update
 
     pip3 install --upgrade pip
     apt-get remove python3-pip --assume-yes
