@@ -9,6 +9,7 @@ sudo sh make_image.sh
 #Install pitally
 
 # setup pureftpd
+```
 yaourt -S pure-ftpd tree ffmpeg
 
 
@@ -61,16 +62,19 @@ TLSCipherSuite -S:HIGH:MEDIUM:+TLSv1
 sudo chown ftp:ftp /srv/ftp
 sudo systemctl enable pure-ftpd.service
 sudo pitally_drive.sh --enable-service
-
+```
 
 #test :
+```
 dd if=/dev/zero of=/tmp/test_ftp count=1024 bs=1024
 wput /tmp/test_ftp  ftp://pi:pitally_01234@localhost
 curl ftp://localhost/tmp/test_ftp > /dev/null
+```
 
 #router
 
+```
 uci set system.@system[0].hostname='pitally-router'
 uci commit system
 /etc/init.d/system reload
-
+```
